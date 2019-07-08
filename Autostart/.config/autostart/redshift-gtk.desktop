@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Redshift
+Comment=Ajuste la température des couleurs de l'écran en fonction de l'environnement
+Exec=redshift-gtk
+Icon=redshift
+Terminal=false
+Type=Application
+Categories=Accessoires;
+StartupNotify=true
