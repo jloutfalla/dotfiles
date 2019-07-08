@@ -12,4 +12,4 @@ Just run this command :
 $ stow -t DEST_FOLDER <CONFIG_FOLDER1 CONFIG_FOLDER2 ...>
 ```
 
-*(You can ignore a folder thanks to : `--ignore=FOLDER` parameter)*
+*(You can ignore a folder thanks to the `--ignore=FOLDER` parameter)*
