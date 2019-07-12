@@ -225,8 +225,9 @@ smart_borders on
 
 
 # Exec at startup
+exec --no-startup-id xss-lock -- i3lock -i $lock_image &
 exec feh --bg-scale $background_image
-exec --no-startup-id cancel-white-noise.sh
+exec cancel-white-noise.sh
 exec $term 
 exec --no-startup-id firefox
 exec_always --no-startup-id "killall polybar; polybar -r default"
