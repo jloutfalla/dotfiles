@@ -225,13 +225,8 @@ smart_borders on
 
 
 # Exec at startup
-exec --no-startup-id xss-lock -- i3lock -i /home/shadowrises/Images/Wallpaper/wallpaper_hina.png &
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg) &
-exec compton
 exec feh --bg-scale $background_image
-exec --no-startup-id nm-applet
-exec --no-startup-id redshift-gtk
-exec --no-startup-id ~/.cancel-white-noise.sh
+exec --no-startup-id cancel-white-noise.sh
 exec $term 
 exec --no-startup-id firefox
 exec_always --no-startup-id "killall polybar; polybar -r default"
