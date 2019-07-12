@@ -15,7 +15,7 @@
 ######################################
 
 set $mod Mod4
-set $term st
+set $term st -t "st" -e "zsh"
 set $command_runner dmenu_run
 set $background_image /home/shadowrises/Images/Wallpaper/wallpaper_reimu.jpg
 set $lock_image /home/shadowrises/Images/Wallpaper/wallpaper_hina.png # the image must be a PNG
@@ -55,7 +55,7 @@ font pango:Liberation Sans Mono 8
 floating_modifier $mod
 
 # start a terminal (default : i3-sensible-terminal)
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec $term
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -205,11 +205,6 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute s
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
 
-# Touchpad tap to click
-exec xinput set-prop 11 282 1
-
-# Mouse cursor acceleration
-exec xinput set-prop 11 302 0.55
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play
