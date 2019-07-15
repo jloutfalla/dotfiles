@@ -15,9 +15,9 @@ setopt appendhistory
 # End of lines configured by zsh-newuser-install
 
 alias ls='ls --color=auto --group-directories-first'
-alias ll='ls -l --color=auto --group-directories-first'
+alias ll='ls -lh --color=auto --group-directories-first'
 alias la='ls -a --color=auto --group-directories-first'
-alias lal='ls -al --color=auto --group-directories-first'
+alias lal='ls -alh --color=auto --group-directories-first'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 
