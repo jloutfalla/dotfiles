@@ -120,7 +120,7 @@ bindsym $mod+q focus parent
 
 
 # Asign application to workspace
-assign [class="Firefox"] $ws2
+assign [class="firefox"] $ws2
 assign [class="Emacs"] $ws3
 assign [class="Atom"] $ws3
 assign [class="jetbrains-idea-ce"] $ws3
