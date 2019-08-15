@@ -17,7 +17,6 @@
 set $mod Mod4
 set $term st -t "st" -e "zsh"
 set $command_runner dmenu_run
-set $background_image /home/shadowrises/Images/Wallpaper/wallpaper_reimu.jpg
 set $lock_image /home/shadowrises/Images/Wallpaper/wallpaper_hina.png # the image must be a PNG
 
 
@@ -226,8 +225,6 @@ smart_borders on
 
 # Exec at startup
 exec --no-startup-id xss-lock -- i3lock -i $lock_image &
-exec feh --bg-scale $background_image
-exec cancel-white-noise.sh
 exec $term 
 exec --no-startup-id firefox
 exec_always --no-startup-id "killall polybar; polybar -r default"
