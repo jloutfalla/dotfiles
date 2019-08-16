@@ -17,7 +17,7 @@
 set $mod Mod4
 set $term st -t "st" -e "zsh"
 set $command_runner dmenu_run
-set $lock_image /home/shadowrises/Images/Wallpaper/wallpaper_hina.png # the image must be a PNG
+set $lock_image Images/Wallpaper/wallpaper_hina.png # the image must be a PNG
 
 
 # Define names for default workspaces for which we configure key bindings later on.
