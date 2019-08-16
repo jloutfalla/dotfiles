@@ -5,10 +5,10 @@
 ;;; Activating the melpa depot
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("ELPA"  . "https://tromey.com/elpa/")
-			 ("gnu"   . "https://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("org"   . "https://orgmode.org/elpa/")))
+(setq package-archives '(("ELPA"  . "http://tromey.com/elpa/")
+						 ("gnu"   . "http://elpa.gnu.org/packages/")
+						 ("melpa" . "https://melpa.org/packages/")
+						 ("org"   . "https://orgmode.org/elpa/")))
 (package-initialize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -35,7 +35,9 @@
  '(custom-safe-themes
    (quote
 	("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
- '(package-selected-packages (quote (which-key use-package spacemacs-theme flycheck))))
+ '(package-selected-packages
+   (quote
+	(rainbow-mode which-key use-package spacemacs-theme flycheck))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

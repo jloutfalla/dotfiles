@@ -163,6 +163,12 @@ Color parentheses and other delimiters depending of their depth.
 	(add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
 
+** Show parens
+Highlights matching parens when the cursor is just behind one of them
+#+BEGIN_SRC emacs-lisp
+  (show-paren-mode 1)
+#+END_SRC
+
 * Programming
 Minor, non-completion related settings and plugins for writing code
 
@@ -217,6 +223,12 @@ I prefer to always use 4 characters wide indentations.
 
   (add-hook 'prog-mode-hook 'my-personal-code-style)
   (add-hook 'web-mode-hook 'my-personal-code-style)
+#+END_SRC
+
+** Tab completion
+#+BEGIN_SRC emacs-lisp
+  (setq tab-always-indent 'complete)
+  (add-to-list 'completion-styles 'initials t)
 #+END_SRC
 
 ** yasnippet
@@ -277,7 +289,7 @@ Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (with-eval-after-load 'company
 	(add-hook 'c++-mode-hook 'company-mode)
-	(add-hook 'c-mode-hook 'companu-mode))
+	(add-hook 'c-mode-hook 'company-mode))
 
   (use-package company-c-headers
 	:ensure t)
@@ -286,7 +298,7 @@ Requires libclang to be installed.
 	:ensure t
 	:config
 	(setq company-backends '((company-c-headers
-							  companu-dabbrev-code
+							  company-dabbrev-code
 							  company-irony))))
 
   (use-package irony
