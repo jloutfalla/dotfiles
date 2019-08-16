@@ -21,7 +21,7 @@ nbrRandom=$(random.sh)
 randomCirno=$(((nbrRandom % 2) + 1))
 
 quotes="I'm the strongest !|You BAKA !|Yes eye can !"
-nbrRandom=$((random.sh))
+nbrRandom=$(random.sh)
 randomQuotes=$(((nbrRandom % 3) + 1))
 
 cirno=$(echo "$cirno" | cut -d " " -f "$randomCirno")
