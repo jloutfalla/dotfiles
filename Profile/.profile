@@ -1,3 +1,5 @@
+#!/bin/sh
+
 export ENV="$HOME/.shinit"
 
 if [ -d "$HOME"/.scripts ] && echo "$PATH" | grep -q -v ".scripts"
