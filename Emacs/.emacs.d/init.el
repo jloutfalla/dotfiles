@@ -5,8 +5,8 @@
 ;;; Activating the melpa depot
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("ELPA"  . "https://tromey.com/elpa/")
-			 ("gnu"   . "https://elpa.gnu.org/packages/")
+(setq package-archives '(("ELPA"  . "http://tromey.com/elpa/")
+			 ("gnu"   . "http://elpa.gnu.org/packages/")
 			 ("melpa" . "https://melpa.org/packages/")
 			 ("org"   . "https://orgmode.org/elpa/")))
 (package-initialize)
