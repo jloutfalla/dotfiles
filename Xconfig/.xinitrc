@@ -52,7 +52,7 @@ fi
 udiskie -As2 &
 compton &
 nm-applet &
-redshift-gtk &
+redshift-gtk -l 45.750000:4.850000 & # Latitude and Longitude of Lyon
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)
 feh --bg-scale Images/Wallpaper/gnu.png
 
