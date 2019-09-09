@@ -49,14 +49,25 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 
+# For JetBrains IDEs to work
+export _JAVA_AWT_WM_NONREPARENTING=1
+export AWT_TOOLKIT="MToolkit"
+wmname LG3D
+
+
 udiskie -As2 &
 compton &
 nm-applet &
 redshift-gtk &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)
 feh --bg-scale Images/Wallpaper/wallpaper_reimu.jpg
+xss-lock -- i3lock -i "$HOME/Images/Wallpaper/wallpaper_hina.png" &
 
 xinput set-prop 11 281 1
 xinput set-prop 11 301 0.55
 
-exec i3
+dwmstatus 2>&1 >/dev/null &
+st &
+firefox &
+
+exec dwm

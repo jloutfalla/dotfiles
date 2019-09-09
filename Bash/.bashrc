@@ -14,4 +14,10 @@ PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\
 
 eval $(thefuck --alias)
 
-cd ~
+
+if [ -n "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]
+then
+
+    cirnosay-script.sh
+
+fi
