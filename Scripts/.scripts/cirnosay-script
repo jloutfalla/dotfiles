@@ -17,7 +17,7 @@ CIRNO_IMAGES_PATH="/usr/share/cirnosay/pictures"
 
 
 cirno="Touhoudex_Chibi_Cirno.png Touhoudex_Cirno.png" #Touhoudex_EX_Cirno.png
-nbrRandom=$(random.sh)
+nbrRandom=$(random)
 randomCirno=$(((nbrRandom % 2) + 1))
 
 
@@ -26,7 +26,7 @@ then
 	quotes="Happy Cirno Day !"
 else
 	quotes="I'm the strongest !|You BAKA !|Yes eye can !"
-	nbrRandom=$(random.sh)
+	nbrRandom=$(random)
 	randomQuotes=$(((nbrRandom % 3) + 1))
 
 	quotes=$(echo "$quotes" | cut -d "|" -f "$randomQuotes")

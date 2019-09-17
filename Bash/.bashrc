@@ -18,6 +18,6 @@ eval $(thefuck --alias)
 if [ -n "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]
 then
 
-    cirnosay-script.sh
+    cirnosay-script
 
 fi
