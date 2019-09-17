@@ -10,8 +10,8 @@ fi
 export VISUAL="vim"
 export EDITOR="$VISUAL"
 
-
-if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]
+ 
+if [ -z "$DISPLAY" ] && [ ! -z "$XDG_VTNR"  ] && [ "$XDG_VTNR" -eq 1 ]
 then
     startx
 fi
