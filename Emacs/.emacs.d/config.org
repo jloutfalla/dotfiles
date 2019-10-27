@@ -244,7 +244,9 @@ I prefer to always use 4 characters wide indentations.
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-	:ensure t)
+	:ensure t
+	:init
+	(global-flycheck-mode))
 #+END_SRC
 
 ** company mode
@@ -444,4 +446,25 @@ Requires libclang to be installed.
 	:config
 	(require 'company)
 	(add-hook 'shell-mode-hook 'shell-mode-company-init))
+#+END_SRC
+
+*** PHP
+**** php-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package php-mode
+	:ensure t)
+#+END_SRC
+
+**** company-php
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'php-mode-hook 'company-mode)
+
+  (defun php-mode-company-init ()
+	(setq-local company-backends '(company-ac-php-backend)))
+
+  (use-package company-php
+	:ensure t
+	:config
+	(require 'company)
+	(add-hook 'php-mode-hook 'php-mode-company-init))
 #+END_SRC
