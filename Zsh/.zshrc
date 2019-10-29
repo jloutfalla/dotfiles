@@ -172,4 +172,4 @@ eval $(thefuck --alias)
 eval $(ssh-agent) > /dev/null
 
 # Cirnosay
-cirnosay-script.sh
+cirnosay-script
