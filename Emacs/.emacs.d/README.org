@@ -1,6 +1,6 @@
 #+STARTUP: overview
-#+TITLE: ShadowRises' Emacs configuration
-#+CREATOR: Jean-Baptiste 'ShadowRises' Loutfalla
+#+TITLE: My Emacs configuration
+#+CREATOR: Jean-Baptiste Loutfalla
 #+LANGUAGE: en
 
 * Special thanks
@@ -19,6 +19,7 @@ This congiguration file is based on the one he made but I had some modifications
 - =clang=, for C/C++ completion.
 - =sbcl=, for clisp completion and repl.
 - =lua=
+- =php=, for PHP check.
 
 * Some notes
 ** On use-package some more
@@ -39,8 +40,8 @@ This is also the reason why your org-mode configuration should never be called =
 For now I'm using the Spacemacs theme.
 #+BEGIN_SRC emacs-lisp
   (unless (package-installed-p 'spacemacs-theme)
-	(package-refresh-contents)
-	(package-install 'spacemacs-theme))
+    (package-refresh-contents)
+    (package-install 'spacemacs-theme))
 #+END_SRC
 
 * Basic Interface Settings
@@ -89,9 +90,9 @@ There are some setting that do not depend on packages and are built-in enhanceme
 Use of asynchronous processes whereever it's possible.
 #+BEGIN_SRC emacs-lisp
   (use-package async
-	:ensure t
-	:init
-	(dired-async-mode 1))
+    :ensure t
+    :init
+    (dired-async-mode 1))
 #+END_SRC
 
 * Terminal
@@ -99,7 +100,7 @@ Use of asynchronous processes whereever it's possible.
 #+BEGIN_SRC emacs-lisp
   (defvar my-terminal-shell "/bin/bash")
   (defadvice ansi-term (before force-bash)
-	(interactive (list my-terminal-shell)))
+    (interactive (list my-terminal-shell)))
   (ad-activate 'ansi-term)
 #+END_SRC
 
@@ -116,32 +117,45 @@ This package will show you all keybindings possible when you start one.
 It can be really useful when you don't remember a long keybinding.
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
-	:ensure t
-	:init
-	(which-key-mode))
+    :ensure t
+    :init
+    (which-key-mode))
 #+END_SRC
 
 * Minor conveniences
+** Edit/Open the configuration
+Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
+#+BEGIN_SRC emacs-lisp
+  (defun edit-config ()
+    "Edit/Open ~/.emacs.d/config.org"
+    (interactive)
+    (setq-local config-file "~/.emacs.d/config.org")
+    (when (file-readable-p config-file)
+      (find-file config-file)))
+
+  (global-set-key (kbd "C-c e") 'edit-config)
+#+END_SRC
+
 ** Reloading the configuration
 Simply pressing =C-c r= will reload this file. You can also invoke =config-reload=.
 #+BEGIN_SRC emacs-lisp
   (defun config-reload ()
-	"Reloads ~/.emacs.d/config.org at runtime"
-	(interactive)
-	(when (file-readable-p "~/.emacs.d/config.org")
-	  (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))))
+    "Reloads ~/.emacs.d/config.org at runtime"
+    (interactive)
+    (setq-local config-file "~/.emacs.d/config.org")
+    (when (file-readable-p config-file)
+      (org-babel-load-file (expand-file-name config-file))))
+
   (global-set-key (kbd "C-c r") 'config-reload)
 #+END_SRC
 
 ** Electric
 Enable automatic closing brakets, parentheses, quotation marks, ...
 #+BEGIN_SRC emacs-lisp
-  (setq electric-pair-pairs '(
-							  (?\{ . ?\})
-							  (?\( . ?\))
-							  (?\[ . ?\])
-							  (?\" . ?\")
-							  ))
+  (setq electric-pair-pairs '((?\{ . ?\})
+			      (?\( . ?\))
+			      (?\[ . ?\])
+			      (?\" . ?\")))
   (electric-pair-mode t)
 #+END_SRC
 
@@ -149,18 +163,18 @@ Enable automatic closing brakets, parentheses, quotation marks, ...
 Highlights hexadecimal codes that resembles a color in the appropriate color.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
-	:ensure t
-	:init
-	(add-hook 'prog-mode-hook 'rainbow-mode))
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
 
 ** Rainbow delimiters
 Color parentheses and other delimiters depending of their depth.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-	:ensure t
-	:init
-	(add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    :ensure t
+    :init
+    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 #+END_SRC
 
 ** Show parens
@@ -172,59 +186,6 @@ Highlights matching parens when the cursor is just behind one of them
 * Programming
 Minor, non-completion related settings and plugins for writing code
 
-** Indentation
-I prefer to always use 4 characters wide indentations.
-
-#+BEGIN_SRC emacs-lisp
-  (defun my-setup-indent (n)
-	;; C/C++/Java
-	(setq-default c-basic-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-
-	;; Web Development
-	(setq-default coffee-tab-width n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default javascript-indent-level n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default js-indent-level n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default js2-basic-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default web-mode-markup-indent-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default web-mode-css-indent-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default web-mode-code-indent-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-  
-	(setq-default css-indent-offset n
-				  tab-width n
-				  indent-tabs-mode t)
-	)
-
-  (defun my-personal-code-style ()
-	;;(setq indent-tabs-mode nil)
-	(my-setup-indent 4)
-	)
-
-  (add-hook 'prog-mode-hook 'my-personal-code-style)
-  (add-hook 'web-mode-hook 'my-personal-code-style)
-#+END_SRC
-
 ** Tab completion
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent 'complete)
@@ -234,19 +195,19 @@ I prefer to always use 4 characters wide indentations.
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-	:ensure t
-	:config
-	(use-package yasnippet-snippets
-	  :ensure t)
-	(yas-reload-all))
+    :ensure t
+    :config
+    (use-package yasnippet-snippets
+      :ensure t)
+    (yas-reload-all))
 #+END_SRC
 
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-	:ensure t
-	:init
-	(global-flycheck-mode))
+    :ensure t
+    :init
+    (global-flycheck-mode))
 #+END_SRC
 
 ** company mode
@@ -255,17 +216,17 @@ The delay for copany mode to kick in half a second and starts completion after 2
 I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
   (use-package company
-	:ensure t
-	:config
-	(setq company-idle-delay 0)
-	(setq company-minimum-prefix-length 3))
+    :ensure t
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 3))
 
   (with-eval-after-load 'company
-	(define-key company-active-map (kbd "M-n") nil)
-	(define-key company-active-map (kbd "M-p") nil)
-	(define-key company-active-map (kbd "C-n") #'company-select-next)
-	(define-key company-active-map (kbd "C-p") #'company-select-previous)
-	(define-key company-active-map (kbd "SPC") #'company-abort))
+    (define-key company-active-map (kbd "M-n") nil)
+    (define-key company-active-map (kbd "M-p") nil)
+    (define-key company-active-map (kbd "C-n") #'company-select-next)
+    (define-key company-active-map (kbd "C-p") #'company-select-previous)
+    (define-key company-active-map (kbd "SPC") #'company-abort))
 #+END_SRC
 
 ** Specific languages
@@ -279,83 +240,83 @@ I prefer =C-n= and =C-p= to navigate around the items.
 **** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-clang-analyzer
-	:ensure t
-	:config
-	(with-eval-after-load 'flycheck
-	  (require 'flycheck-clang-analyzer)
-	  (flycheck-clang-analyzer-setup)))
+    :ensure t
+    :config
+    (with-eval-after-load 'flycheck
+      (require 'flycheck-clang-analyzer)
+      (flycheck-clang-analyzer-setup)))
 #+END_SRC
 
 **** company
 Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (with-eval-after-load 'company
-	(add-hook 'c++-mode-hook 'company-mode)
-	(add-hook 'c-mode-hook 'company-mode))
+    (add-hook 'c++-mode-hook 'company-mode)
+    (add-hook 'c-mode-hook 'company-mode))
 
   (use-package company-c-headers
-	:ensure t)
+    :ensure t)
 
   (use-package company-irony
-	:ensure t
-	:config
-	(setq company-backends '((company-c-headers
-							  company-dabbrev-code
-							  company-irony))))
+    :ensure t
+    :config
+    (setq company-backends '((company-c-headers
+			      company-dabbrev-code
+			      company-irony))))
 
   (use-package irony
-	:ensure t
-	:config
-	(add-hook 'c++-mode-hook 'irony-mode)
-	(add-hook 'c-mode-hook 'irony-mode)
-	(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+    :ensure t
+    :config
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 #+END_SRC
 
 *** Rust
 **** rust-mode
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
-	:ensure t
-	:config
-	(setq rust-format-mode-on-save t))
+    :ensure t
+    :config
+    (setq rust-format-mode-on-save t))
 #+END_SRC
 
 **** flycheck
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck-rust
-  :ensure t
-  :config
-  (with-eval-after-load 'rust-mode
-	(require 'flycheck-rust)
-	(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-	(add-hook 'rust-mode-hook 'flycheck-mode-hook)))
+  (use-package flycheck-rust
+    :ensure t
+    :config
+    (with-eval-after-load 'rust-mode
+      (require 'flycheck-rust)
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+      (add-hook 'rust-mode-hook 'flycheck-mode-hook)))
 #+END_SRC
 
 **** company
 #+BEGIN_SRC emacs-lisp
   (use-package company-racer
-	:ensure t
-	:config
-	(require 'company)
-	(add-to-list 'company-backends 'company-racer))
+    :ensure t
+    :config
+    (require 'company)
+    (add-to-list 'company-backends 'company-racer))
 #+END_SRC
 
 **** cargo
 #+BEGIN_SRC emacs-lisp
   (use-package cargo
-	:ensure t
-	:config
-	(with-eval-after-load 'rust-mode
-	  (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+    :ensure t
+    :config
+    (with-eval-after-load 'rust-mode
+      (add-hook 'rust-mode-hook 'cargo-minor-mode)))
 #+END_SRC
 
 **** racer
 #+BEGIN_SRC emacs-lisp
   (use-package racer
-	:ensure t
-	:config
-	(add-hook 'racer-mode-hook #'eldoc-mode)
-	(add-hook 'racer-mode-hook #'company-mode))
+    :ensure t
+    :config
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode))
 #+END_SRC
 
 *** Emacs Lisp
@@ -374,16 +335,16 @@ Requires libclang to be installed.
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
 
   (use-package slime
-	:ensure t
-	:config
-	(setq inferior-lisp-program "/usr/bin/sbcl")
-	(setq slime-contribs '(slime-fancy)))
+    :ensure t
+    :config
+    (setq inferior-lisp-program "/usr/bin/sbcl")
+    (setq slime-contribs '(slime-fancy)))
 
   (use-package slime-company
-	:ensure t
-	:init
-	(require 'company)
-	(slime-setup '(slime-fancy slime-company)))
+    :ensure t
+    :init
+    (require 'company)
+    (slime-setup '(slime-fancy slime-company)))
 #+END_SRC
 
 *** Lua
@@ -402,22 +363,22 @@ Requires libclang to be installed.
   (add-hook 'lua-mode-hook 'company-mode)
 
   (defun custom-lua-repl-bindings ()
-	(local-set-key (kbd "C-c C-s") 'lua-show-process-buffer)
-	(local-set-key (kbd "C-c C-h") 'lua-hide-process-buffer))
+    (local-set-key (kbd "C-c C-s") 'lua-show-process-buffer)
+    (local-set-key (kbd "C-c C-h") 'lua-hide-process-buffer))
 
   (defun lua-mode-company-init ()
-	(setq-local company-backends '((company-lua
-									company-etags
-									company-dabbrev-code))))
+    (setq-local company-backends '((company-lua
+				    company-etags
+				    company-dabbrev-code))))
 
   (use-package company-lua
-	:ensure t
-	:config
-	(require 'company)
-	(setq lua-indent-level 4)
-	(setq lua-indent-string-contents t)
-	(add-hook 'lua-mode-hook 'custom-lua-repl-bindings)
-	(add-hook 'lua-mode-hook 'lua-mode-company-init))
+    :ensure t
+    :config
+    (require 'company)
+    (setq lua-indent-level 4)
+    (setq lua-indent-string-contents t)
+    (add-hook 'lua-mode-hook 'custom-lua-repl-bindings)
+    (add-hook 'lua-mode-hook 'lua-mode-company-init))
 #+END_SRC
 
 *** Bash
@@ -436,23 +397,23 @@ Requires libclang to be installed.
   (add-hook 'shell-mode-hook 'company-mode)
 
   (defun shell-mode-company-init ()
-	(setq-local companu-backends '((company-shell
-									company-shell-env
-									comapny-etags
-									ompany-dabbrev-code))))
+    (setq-local companu-backends '((company-shell
+				    company-shell-env
+				    comapny-etags
+				    company-dabbrev-code))))
 
   (use-package company-shell
-	:ensure t
-	:config
-	(require 'company)
-	(add-hook 'shell-mode-hook 'shell-mode-company-init))
+    :ensure t
+    :config
+    (require 'company)
+    (add-hook 'shell-mode-hook 'shell-mode-company-init))
 #+END_SRC
 
 *** PHP
 **** php-mode
 #+BEGIN_SRC emacs-lisp
   (use-package php-mode
-	:ensure t)
+    :ensure t)
 #+END_SRC
 
 **** company-php
@@ -460,11 +421,11 @@ Requires libclang to be installed.
   (add-hook 'php-mode-hook 'company-mode)
 
   (defun php-mode-company-init ()
-	(setq-local company-backends '(company-ac-php-backend)))
+    (setq-local company-backends '(company-ac-php-backend)))
 
   (use-package company-php
-	:ensure t
-	:config
-	(require 'company)
-	(add-hook 'php-mode-hook 'php-mode-company-init))
+    :ensure t
+    :config
+    (require 'company)
+    (add-hook 'php-mode-hook 'php-mode-company-init))
 #+END_SRC
