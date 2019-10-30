@@ -197,6 +197,7 @@ Enables relative line numbers for programming-related modes.
     :ensure t
     :config
     (setq linum-relative-current-symbol "")
+    (setq linum-relative-backend 'display-line-numbers-mode)
     (add-hook 'prog-mode-hook 'linum-relative-mode))
 #+END_SRC 
 
