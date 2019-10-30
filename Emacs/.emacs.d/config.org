@@ -18,7 +18,6 @@ This congiguration file is based on the one he made but I had some modifications
 *** From package manager :
 - =clang=, for C/C++ completion.
 - =sbcl=, for clisp completion and repl.
-- =lua=
 - =php=, for PHP check.
 
 * Some notes
@@ -36,12 +35,13 @@ stripped out and the remaing =config.el= is parsed.
 This is also the reason why your org-mode configuration should never be called =init.org=.
 
 * Theme
-** Spacemacs theme
-For now I'm using the Spacemacs theme.
+** Zerodark theme
+For now I'm using the Zerodark theme.
 #+BEGIN_SRC emacs-lisp
-  (unless (package-installed-p 'spacemacs-theme)
-    (package-refresh-contents)
-    (package-install 'spacemacs-theme))
+  (use-package zerodark-theme
+    :ensure t
+    :init
+    (load-theme 'zerodark t))
 #+END_SRC
 
 * Basic Interface Settings
@@ -72,6 +72,13 @@ There are some setting that do not depend on packages and are built-in enhanceme
 *** Highlight current line
 #+BEGIN_SRC emacs-lisp
   (when window-system (global-hl-line-mode t))
+#+END_SRC
+
+*** Cursor position
+Show in the mini-buffer the current line and column number of the cursor.
+#+BEGIN_SRC emacs-lisp
+  (setq line-number-mode t)
+  (setq column-number-mode t)
 #+END_SRC
 
 ** Functionality
@@ -118,7 +125,7 @@ It can be really useful when you don't remember a long keybinding.
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
-    :init
+    :config
     (which-key-mode))
 #+END_SRC
 
@@ -183,14 +190,44 @@ Highlights matching parens when the cursor is just behind one of them
   (show-paren-mode 1)
 #+END_SRC
 
-* Programming
-Minor, non-completion related settings and plugins for writing code
+** Line numbers
+Enables relative line numbers for programming-related modes.
+#+BEGIN_SRC emacs-lisp
+  (use-package linum-relative
+    :ensure t
+    :config
+    (setq linum-relative-current-symbol "")
+    (add-hook 'prog-mode-hook 'linum-relative-mode))
+#+END_SRC 
+
+** Subwords
+Makes Emacs considers camelCase strings as multiple words.
+#+BEGIN_SRC emacs-lisp
+  (global-subword-mode 1)
+#+END_SRC
+
+** Replace the selected region
+Enables replacing directly a selected region by what you type.
+#+BEGIN_SRC emacs-lisp
+  (pending-delete-mode t)
+#+END_SRC
+
+** Expand region
+Expends region from the cursor to the word, sentence, ...
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure t
+    :bind ("C-q" . er/expand-region))
+#+END_SRC
 
 ** Tab completion
 #+BEGIN_SRC emacs-lisp
-  (setq tab-always-indent 'complete)
+  (setq tab-always-indent t)
   (add-to-list 'completion-styles 'initials t)
 #+END_SRC
+
+* Programming
+Minor, non-completion related settings and plugins for writing code
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
@@ -205,9 +242,7 @@ Minor, non-completion related settings and plugins for writing code
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :ensure t
-    :init
-    (global-flycheck-mode))
+    :ensure t)
 #+END_SRC
 
 ** company mode
@@ -288,7 +323,7 @@ Requires libclang to be installed.
     :config
     (with-eval-after-load 'rust-mode
       (require 'flycheck-rust)
-      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+      (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
       (add-hook 'rust-mode-hook 'flycheck-mode-hook)))
 #+END_SRC
 
@@ -315,8 +350,8 @@ Requires libclang to be installed.
   (use-package racer
     :ensure t
     :config
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode))
+    (add-hook 'racer-mode-hook 'eldoc-mode)
+    (add-hook 'racer-mode-hook 'company-mode))
 #+END_SRC
 
 *** Emacs Lisp
@@ -347,40 +382,6 @@ Requires libclang to be installed.
     (slime-setup '(slime-fancy slime-company)))
 #+END_SRC
 
-*** Lua
-**** yasnippet
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'lua-mode-hook 'yas-minor-mode)
-#+END_SRC
-
-**** flycheck
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'lua-mode-hook 'flycheck-mode)
-#+END_SRC
-
-**** company
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'lua-mode-hook 'company-mode)
-
-  (defun custom-lua-repl-bindings ()
-    (local-set-key (kbd "C-c C-s") 'lua-show-process-buffer)
-    (local-set-key (kbd "C-c C-h") 'lua-hide-process-buffer))
-
-  (defun lua-mode-company-init ()
-    (setq-local company-backends '((company-lua
-				    company-etags
-				    company-dabbrev-code))))
-
-  (use-package company-lua
-    :ensure t
-    :config
-    (require 'company)
-    (setq lua-indent-level 4)
-    (setq lua-indent-string-contents t)
-    (add-hook 'lua-mode-hook 'custom-lua-repl-bindings)
-    (add-hook 'lua-mode-hook 'lua-mode-company-init))
-#+END_SRC
-
 *** Bash
 **** yasnippet
 #+BEGIN_SRC emacs-lisp
@@ -397,7 +398,7 @@ Requires libclang to be installed.
   (add-hook 'shell-mode-hook 'company-mode)
 
   (defun shell-mode-company-init ()
-    (setq-local companu-backends '((company-shell
+    (setq-local company-backends '((company-shell
 				    company-shell-env
 				    comapny-etags
 				    company-dabbrev-code))))
@@ -416,7 +417,12 @@ Requires libclang to be installed.
     :ensure t)
 #+END_SRC
 
-**** company-php
+**** flycheck
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'php-mode'hook 'flycheck-mode)
+#+END_SRC
+
+**** company
 #+BEGIN_SRC emacs-lisp
   (add-hook 'php-mode-hook 'company-mode)
 
@@ -428,4 +434,13 @@ Requires libclang to be installed.
     :config
     (require 'company)
     (add-hook 'php-mode-hook 'php-mode-company-init))
+#+END_SRC
+
+* Org
+** Common settings
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+  (setq org-src-window-setup 'current-window)
+  (add-hook 'org-mode-hook 'org-indent-mode)
 #+END_SRC
