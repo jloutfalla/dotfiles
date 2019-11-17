@@ -19,6 +19,7 @@ This congiguration file is based on the one he made but I had some modifications
 - =clang=, for C/C++ completion.
 - =sbcl=, for clisp completion and repl.
 - =php=, for PHP check.
+- =racer= and =rustfmt=, for Rust completion and format.
 
 * Some notes
 ** On use-package some more
@@ -316,7 +317,14 @@ Requires libclang to be installed.
     :config
     (setq rust-format-mode-on-save t)
     (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-    (setq company-tooltip-align-annotations t))
+    (setq company-tooltip-align-annotations t)
+    (add-hook 'rust-mode-hook
+              (lambda () (setq indent-tabs-mode nil))))
+#+END_SRC
+
+**** rustfmt
+#+BEGIN_SRC emacs-lisp
+  (setq rust-format-on-save t)
 #+END_SRC
 
 **** flycheck
