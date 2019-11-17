@@ -314,7 +314,9 @@ Requires libclang to be installed.
   (use-package rust-mode
     :ensure t
     :config
-    (setq rust-format-mode-on-save t))
+    (setq rust-format-mode-on-save t)
+    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+    (setq company-tooltip-align-annotations t))
 #+END_SRC
 
 **** flycheck
@@ -326,15 +328,6 @@ Requires libclang to be installed.
       (require 'flycheck-rust)
       (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
       (add-hook 'rust-mode-hook 'flycheck-mode-hook)))
-#+END_SRC
-
-**** company
-#+BEGIN_SRC emacs-lisp
-  (use-package company-racer
-    :ensure t
-    :config
-    (require 'company)
-    (add-to-list 'company-backends 'company-racer))
 #+END_SRC
 
 **** cargo
@@ -351,8 +344,18 @@ Requires libclang to be installed.
   (use-package racer
     :ensure t
     :config
+    (add-hook 'rust-mode-hook 'racer-mode)
     (add-hook 'racer-mode-hook 'eldoc-mode)
     (add-hook 'racer-mode-hook 'company-mode))
+#+END_SRC
+
+**** company
+#+BEGIN_SRC emacs-lisp
+  (use-package company-racer
+    :ensure t
+    :config
+    (require 'company)
+    (add-to-list 'company-backends 'company-racer))
 #+END_SRC
 
 *** Emacs Lisp
