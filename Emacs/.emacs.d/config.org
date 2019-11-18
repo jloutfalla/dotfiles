@@ -332,10 +332,10 @@ Requires libclang to be installed.
   (use-package flycheck-rust
     :ensure t
     :config
-    (with-eval-after-load 'rust-mode
-      (require 'flycheck-rust)
+    (with-eval-after-load 'flycheck
+      (require 'rust-mode)
       (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
-      (add-hook 'rust-mode-hook 'flycheck-mode-hook)))
+      (add-hook 'rust-mode-hook 'flycheck-mode)))
 #+END_SRC
 
 **** cargo
