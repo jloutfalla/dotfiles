@@ -6,13 +6,17 @@
 * Special thanks
 First of all, I would like to thanks Uncle Dave (known as [[https://www.youtube.com/channel/UCDEtZ7AKmwS0_GNJog01D2g][Uncle Dave]] on YouTube or [[https://github.com/daedreth][daedreth]] on GitHub)
 and his Emacs Tutorial series which helped me a lot to use Emacs.
-This congiguration file is based on the one he made but I had some modifications.
+This configuration file is based on the one he made but I had some modifications.
 
 
 * Dependencies for :
 ** Fonts
 *** From package manager :
 - =terminus-font=, for it to work out of the box, if you don't want terminus you need to edit you =init.el=.
+
+** Spelling checker
+*** From package manager :
+- =aspell=, for English spelling (don't forget to install dictionaries).
 
 ** Programming
 *** From package manager :
@@ -31,7 +35,7 @@ on launch and downloads it and installs if necessary.
 As you may have notices, this is the configuration file itself.
 This configuration is written in =org-mode=.
 On launch, this file is being sourced into =~/.emacs.d/init.el=, the prosed will be automatically
-stripped out and the remaing =config.el= is parsed.
+stripped out and the remaining =config.el= is parsed.
 
 This is also the reason why your org-mode configuration should never be called =init.org=.
 
@@ -95,7 +99,7 @@ Show in the mini-buffer the current line and column number of the cursor.
 #+END_SRC
 
 *** Async
-Use of asynchronous processes whereever it's possible.
+Use of asynchronous processes wherever it's possible.
 #+BEGIN_SRC emacs-lisp
   (use-package async
     :ensure t
@@ -131,6 +135,23 @@ It can be really useful when you don't remember a long keybinding.
 #+END_SRC
 
 * Minor conveniences
+** French spelling/grammar checker - Grammalecte
+Since I'm a french person, it can be useful to have it.
+After installing it, you need to run =flycheck-grammalecte-download-grammalecte=.
+#+BEGIN_SRC emacs-lisp
+  (setq flycheck-grammalecte-enabled-modes '(org-mode
+                                             text-mode
+                                             mail-mode
+                                             latex-mode))
+
+  (setq flycheck-grammalecte-report-spellcheck nil)
+  (setq flycheck-grammalecte-report-apos nil)
+  (setq flycheck-grammalecte-report-nbsp nil)
+
+  (use-package flycheck-grammalecte
+    :ensure t)
+#+END_SRC
+
 ** Edit/Open the configuration
 Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
 #+BEGIN_SRC emacs-lisp
@@ -158,7 +179,7 @@ Simply pressing =C-c r= will reload this file. You can also invoke =config-reloa
 #+END_SRC
 
 ** Electric
-Enable automatic closing brakets, parentheses, quotation marks, ...
+Enable automatic closing brackets, parentheses, quotation marks, ...
 #+BEGIN_SRC emacs-lisp
   (setq electric-pair-pairs '((?\{ . ?\})
 			      (?\( . ?\))
@@ -202,7 +223,7 @@ Enables relative line numbers for programming-related modes.
     (add-hook 'prog-mode-hook 'linum-relative-mode))
 #+END_SRC 
 
-** Subwords
+** Sub words
 Makes Emacs considers camelCase strings as multiple words.
 #+BEGIN_SRC emacs-lisp
   (global-subword-mode 1)
@@ -248,7 +269,7 @@ Minor, non-completion related settings and plugins for writing code
 #+END_SRC
 
 ** company mode
-The delay for copany mode to kick in half a second and starts completion after 2 characters.
+The delay for company mode to kick in half a second and starts completion after 2 characters.
 
 I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
