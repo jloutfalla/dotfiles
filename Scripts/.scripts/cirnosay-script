@@ -25,9 +25,9 @@ if [ "$(date +%m)" -eq 9 ] && [ "$(date +%d)" -eq 9 ]
 then
 	quotes="Happy Cirno Day !"
 else
-	quotes="I'm the strongest !|You BAKA !|Yes eye can !"
+	quotes="I'm the strongest !|You BAKA !|Yes eye can !|Join the (9) gang !"
 	nbrRandom=$(random)
-	randomQuotes=$(((nbrRandom % 3) + 1))
+	randomQuotes=$(((nbrRandom % 4) + 1))
 
 	quotes=$(echo "$quotes" | cut -d "|" -f "$randomQuotes")
 fi
