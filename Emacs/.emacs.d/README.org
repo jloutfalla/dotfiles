@@ -472,8 +472,12 @@ Requires libclang to be installed.
 * Org
 ** Common settings
 #+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
   (setq org-src-window-setup 'current-window)
+
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+END_SRC
