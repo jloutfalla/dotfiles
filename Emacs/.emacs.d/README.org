@@ -1,13 +1,11 @@
 #+STARTUP: overview
 #+TITLE: My Emacs configuration
-#+CREATOR: Jean-Baptiste Loutfalla
 #+LANGUAGE: en
 
 * Special thanks
 First of all, I would like to thanks Uncle Dave (known as [[https://www.youtube.com/channel/UCDEtZ7AKmwS0_GNJog01D2g][Uncle Dave]] on YouTube or [[https://github.com/daedreth][daedreth]] on GitHub)
 and his Emacs Tutorial series which helped me a lot to use Emacs.
-This configuration file is based on the one he made but I had some modifications.
-
+This configuration file is based on the one he made.
 
 * Dependencies for :
 ** Fonts
@@ -24,6 +22,11 @@ This configuration file is based on the one he made but I had some modifications
 - =sbcl=, for clisp completion and repl.
 - =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
+
+** Exporting
+*** From the package manager :
++ =texlive=, for exportations using LaTeX.
++ =pygmentize=, for code highlighting when export to PDF.
 
 * Some notes
 ** On use-package some more
@@ -480,4 +483,69 @@ Requires libclang to be installed.
   (setq org-src-window-setup 'current-window)
 
   (add-hook 'org-mode-hook 'org-indent-mode)
+#+END_SRC
+
+Allow =babel= to execute Emacs lisp, Shell, Python code.
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)
+     (python . t)))
+#+END_SRC
+
+Don't ask before evaluating code blocks.
+#+BEGIN_SRC emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+** Exporting
+Allow export to beamer (for presentations).
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-beamer)
+#+END_SRC
+
+*** Exporting to HTML
+Don't include a footer with my contact and publishing information.
+#+BEGIN_SRC emacs-lisp
+  (setq org-html-postamble nil)
+#+END_SRC
+
+**** emacs-htmlize 
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure t)
+#+END_SRC
+
+**** ox-twbs
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-twbs
+    :ensure t)
+#+END_SRC
+
+*** Exporting to PDF
+This will allow syntax highlighting in the code in PDFs. I use the =minted= package, but if it shells out to =pygments= to do the actual work.
+=pdflatex= usually disallows shell command so this will enables that :
+#+BEGIN_SRC emacs-lisp
+  (setq org-latex-pdf-process
+        '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+END_SRC
+
+Include the =minted= package in all my LaTeX exports.
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-latex-packages-alist '("" "minted"))
+  (setq org-latex-listings 'minted)
+#+END_SRC
+
+*** TeX configuration
+Automatically parse the file after loading it.
+#+BEGIN_SRC emacs-lisp
+  (setq TeX-parse-self t)
+#+END_SRC
+
+Always use =pdflatex= when compiling LaTeX documents.
+#+BEGIN_SRC emacs-lisp
+  (setq TeX-PDF-mode t)
 #+END_SRC
