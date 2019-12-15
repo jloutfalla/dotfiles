@@ -185,9 +185,9 @@ Simply pressing =C-c r= will reload this file. You can also invoke =config-reloa
 Enable automatic closing brackets, parentheses, quotation marks, ...
 #+BEGIN_SRC emacs-lisp
   (setq electric-pair-pairs '((?\{ . ?\})
-			      (?\( . ?\))
-			      (?\[ . ?\])
-			      (?\" . ?\")))
+                              (?\( . ?\))
+                              (?\[ . ?\])
+                              (?\" . ?\")))
   (electric-pair-mode t)
 #+END_SRC
 
