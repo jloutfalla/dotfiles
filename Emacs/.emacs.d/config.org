@@ -246,7 +246,13 @@ Expends region from the cursor to the word, sentence, ...
     :bind ("C-q" . er/expand-region))
 #+END_SRC
 
-** Tab completion
+** Tabs indentation and completion
+Replace tabs by spaces.
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+Enables tab completions.
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent t)
   (add-to-list 'completion-styles 'initials t)
