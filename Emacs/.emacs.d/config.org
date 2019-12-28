@@ -42,6 +42,25 @@ stripped out and the remaining =config.el= is parsed.
 
 This is also the reason why your org-mode configuration should never be called =init.org=.
 
+* Needs at startup
+** Activate the MELPA depot
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (setq package-enable-at-startup nil)
+  (setq package-archives '(("ELPA"  . "http://tromey.com/elpa/")
+                           ("gnu"   . "http://elpa.gnu.org/packages/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("org"   . "https://orgmode.org/elpa/")))
+  (package-initialize)
+#+END_SRC
+
+** Boostrapping =use-package=
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+#+END_SRC
+
 * Theme
 ** Zerodark theme
 For now I'm using the Zerodark theme.
@@ -54,8 +73,12 @@ For now I'm using the Zerodark theme.
 
 * Basic Interface Settings
 There are some setting that do not depend on packages and are built-in enhancements to UI.
-
 ** Looks
+*** Don't load X resources
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-x-resources t)
+#+END_SRC
+
 *** Disable menus and scrollbars
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)
@@ -260,7 +283,6 @@ Enables tab completions.
 
 * Programming
 Minor, non-completion related settings and plugins for writing code
-
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -395,7 +417,6 @@ Requires libclang to be installed.
     (require 'company)
     (add-to-list 'company-backends 'company-racer))
 #+END_SRC
-
 *** Emacs Lisp
 **** eldoc
 #+BEGIN_SRC emacs-lisp
@@ -422,6 +443,12 @@ Requires libclang to be installed.
     :init
     (require 'company)
     (slime-setup '(slime-fancy slime-company)))
+#+END_SRC
+
+*** Scheme
+Use GNU Guile as the interpreter.
+#+BEGIN_SRC emacs-lisp
+  (setq scheme-program-name "guile")
 #+END_SRC
 
 *** Bash
