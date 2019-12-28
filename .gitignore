@@ -1,4 +1,3 @@
 Emacs/.emacs.d/*
-!Emacs/.emacs.d/init.el
 !Emacs/.emacs.d/config.org
 !Emacs/.emacs.d/README.org
