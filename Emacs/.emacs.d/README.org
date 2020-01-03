@@ -62,23 +62,18 @@ This is also the reason why your org-mode configuration should never be called =
 #+END_SRC
 
 * Theme
-** Zerodark theme
-For now I'm using the Zerodark theme.
+** Base16 Tomorrow Night theme
+I use the Base16 Tomorrow Night theme because it doesn't mess up when Emacs is in the terminal.
 #+BEGIN_SRC emacs-lisp
-  (use-package zerodark-theme
+  (use-package base16-theme
     :ensure t
-    :init
-    (load-theme 'zerodark t))
+    :config
+    (load-theme 'base16-tomorrow-night t))
 #+END_SRC
 
 * Basic Interface Settings
 There are some setting that do not depend on packages and are built-in enhancements to UI.
 ** Looks
-*** Don't load X resources
-#+BEGIN_SRC emacs-lisp
-  (setq inhibit-x-resources t)
-#+END_SRC
-
 *** Disable menus and scrollbars
 #+BEGIN_SRC emacs-lisp
   (tool-bar-mode -1)

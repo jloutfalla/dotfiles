@@ -1,0 +1,39 @@
+#!/bin/sh
+
+usage() {
+    echo "This script prompt Cirno saying something thanks to cirnosay"
+}
+
+if [ "$#" -gt 0 ]
+then
+
+    usage
+    exit 0
+
+fi
+
+# Default path to the pics of Cirno
+CIRNO_IMAGES_PATH="/usr/share/cirnosay/pictures"
+
+
+cirno="Touhoudex_Chibi_Cirno.png Touhoudex_Cirno.png" #Touhoudex_EX_Cirno.png
+nbrRandom=$(random)
+randomCirno=$(((nbrRandom % 2) + 1))
+
+
+if [ "$(date +%m)" -eq 9 ] && [ "$(date +%d)" -eq 9 ]
+then
+	quotes="Happy Cirno Day !"
+else
+	quotes="I'm the strongest !|You BAKA !|Yes eye can !|Join the (9) gang !"
+	nbrRandom=$(random)
+	randomQuotes=$(((nbrRandom % 4) + 1))
+
+	quotes=$(echo "$quotes" | cut -d "|" -f "$randomQuotes")
+fi
+
+cirno=$(echo "$cirno" | cut -d " " -f "$randomCirno")
+
+echo ""
+cirnosay -b a -i "$CIRNO_IMAGES_PATH/$cirno" "$quotes"
+echo ""
