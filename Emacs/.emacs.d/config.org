@@ -129,9 +129,9 @@ Use of asynchronous processes wherever it's possible.
 #+END_SRC
 
 * Terminal
-** Setting default Shell to Bash
+** Setting default Shell to Zsh
 #+BEGIN_SRC emacs-lisp
-  (defvar my-terminal-shell "/bin/bash")
+  (defvar my-terminal-shell "/bin/zsh")
   (defadvice ansi-term (before force-bash)
     (interactive (list my-terminal-shell)))
   (ad-activate 'ansi-term)
