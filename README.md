@@ -6,7 +6,13 @@ to use, make sure that the package `stow is installed.
 
 ## Dependencies
 I use [base16-shell](https://github.com/chriskempson/base16-shell) to
-set my shell's default ANSI colors and [base16-xresources](https://github.com/binaryplease/base16-xresources)
+set my shell's default ANSI colors.  
+To setup `base16-shell` :
+```shell
+$ base16_ # hit tab to complete with the theme that you want
+```
+
+I also use [base16-xresources](https://github.com/binaryplease/base16-xresources)
 for my Xresources.
 
 ## Installation
