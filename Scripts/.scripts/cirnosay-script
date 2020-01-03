@@ -36,3 +36,4 @@ cirno=$(echo "$cirno" | cut -d " " -f "$randomCirno")
 
 echo ""
 cirnosay -b a -i "$CIRNO_IMAGES_PATH/$cirno" "$quotes"
+echo ""

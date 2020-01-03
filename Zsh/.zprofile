@@ -1,0 +1,5 @@
+#
+# ~/.zshprofile
+#
+
+source "$HOME/.profile"
