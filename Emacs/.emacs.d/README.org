@@ -115,7 +115,7 @@ Show in the mini-buffer the current line and column number of the cursor.
 ** Functionality
 *** Change the location of backup files
 #+BEGIN_SRC emacs-lisp
-  (setq backup-directory-alist '(("." . "~/.emacs-backup")))
+  (setq backup-directory-alist '(("." . "/tmp")))
   (setq backup-by-copying-when-linked t)
 #+END_SRC
 
