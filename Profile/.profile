@@ -7,8 +7,8 @@ then
 
 fi
 
-export VISUAL="vim"
-export EDITOR="$VISUAL"
+export EDITOR="emacsclient -t"
+export VISUAL="emacsclient -c -a emacs"
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
  
 if [ -z "$DISPLAY" ] && [ ! -z "$XDG_VTNR"  ] && [ "$XDG_VTNR" -eq 1 ]
