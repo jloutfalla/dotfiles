@@ -1,17 +1,16 @@
+#+TITLE: Emacs configuration
+#+AUTHOR: Jean-Baptiste Loutfalla
 #+STARTUP: overview
-#+TITLE: My Emacs configuration
 #+LANGUAGE: en
+#+OPTIONS: toc:nil num:nil
 
 * Special thanks
-First of all, I would like to thanks Uncle Dave (known as [[https://www.youtube.com/channel/UCDEtZ7AKmwS0_GNJog01D2g][Uncle Dave]] on YouTube or [[https://github.com/daedreth][daedreth]] on GitHub)
+First of all, I would like to thanks Uncle Dave (known as [[https://www.youtube.com/channel/UCDEtZ7AKmwS0_GNJog01D2g][Uncle Dave]] on YouTube or [[https://github.com/daedreth/UncleDavesEmacs][daedreth]] on GitHub)
 and his Emacs Tutorial series which helped me a lot to use Emacs.
-This configuration file is based on the one he made.
+This configuration file is based on the one he made and from different
+other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org][Harry R. Schwartz]].
 
 * Dependencies
-** Fonts
-*** From package manager
-- =terminus-font=, for it to work out of the box, if you don't want terminus you need to edit you =init.el=.
-
 ** Spelling checker
 *** From package manager
 - =aspell=, for English spelling (don't forget to install dictionaries).
