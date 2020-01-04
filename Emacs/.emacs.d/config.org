@@ -7,24 +7,24 @@ First of all, I would like to thanks Uncle Dave (known as [[https://www.youtube.
 and his Emacs Tutorial series which helped me a lot to use Emacs.
 This configuration file is based on the one he made.
 
-* Dependencies for :
+* Dependencies
 ** Fonts
-*** From package manager :
+*** From package manager
 - =terminus-font=, for it to work out of the box, if you don't want terminus you need to edit you =init.el=.
 
 ** Spelling checker
-*** From package manager :
+*** From package manager
 - =aspell=, for English spelling (don't forget to install dictionaries).
 
 ** Programming
-*** From package manager :
+*** From package manager
 - =clang=, for C/C++ completion.
 - =sbcl=, for clisp completion and repl.
 - =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
 
 ** Exporting
-*** From the package manager :
+*** From the package manager
 + =texlive=, for exportations using LaTeX.
 + =pygmentize=, for code highlighting when export to PDF.
 
@@ -43,6 +43,12 @@ stripped out and the remaining =config.el= is parsed.
 This is also the reason why your org-mode configuration should never be called =init.org=.
 
 * Needs at startup
+** Garbage collection
+Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
+#+BEGIN_SRC emacs-lisp
+  (setq gc-cons-threshold 20000000)
+#+END_SRC
+
 ** Activate the MELPA depot
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -81,9 +87,9 @@ There are some setting that do not depend on packages and are built-in enhanceme
   (scroll-bar-mode -1)
 #+END_SRC
 
-*** Disable bell
+*** Visible bell
 #+BEGIN_SRC emacs-lisp
-  (setq ring-bell-function 'ignore)
+  (setq visible-bell t)
 #+END_SRC
 
 *** Set UTF-8 encoding
@@ -108,10 +114,27 @@ Show in the mini-buffer the current line and column number of the cursor.
 #+END_SRC
 
 ** Functionality
-*** Change the location of backup files
+*** Do not create backup files
 #+BEGIN_SRC emacs-lisp
-  (setq backup-directory-alist '(("." . "/tmp")))
-  (setq backup-by-copying-when-linked t)
+  (setq make-backup-files nil)
+#+END_SRC
+
+*** Change the location of auto-save files to =/tmp=
+#+BEGIN_SRC emacs-lisp
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory)))
+#+END_SRC
+
+*** Always follow symlinks
+#+BEGIN_SRC emacs-lisp
+  (setq vc-follow-symlinks t)
+#+END_SRC
+
+*** Auto revert files on change
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
 #+END_SRC
 
 *** Change yes-or-no questions into y-or-n questions
@@ -276,8 +299,23 @@ Enables tab completions.
   (add-to-list 'completion-styles 'initials t)
 #+END_SRC
 
+** =beacon=
+#+BEGIN_SRC emacs-lisp
+  (use-package beacon
+    :ensure t
+    :config
+    (beacon-mode 1))
+#+END_SRC
+
 * Programming
-Minor, non-completion related settings and plugins for writing code
+** auto-complete
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :config
+    (ac-config-default))
+#+END_SRC
+
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -511,6 +549,7 @@ Use GNU Guile as the interpreter.
   (setq org-src-window-setup 'current-window)
 
   (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
 #+END_SRC
 
 Allow =babel= to execute Emacs lisp, Shell, Python code.
