@@ -14,6 +14,13 @@ compinit
 setopt appendhistory
 # End of lines configured by zsh-newuser-install
 
+
+# This allows running `shell` properly within Emacs
+if [ -n "$INSIDE_EMACS" ];
+then
+    export TERM=dumb
+fi
+
 source "$HOME/.alias"
 
 #------------------------------
