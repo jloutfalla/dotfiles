@@ -552,6 +552,14 @@ Use GNU Guile as the interpreter.
 #+END_SRC
 
 * Org
+** auto-complete
+#+BEGIN_SRC emacs-lisp
+  (use-package org-ac
+    :ensure t
+    :config
+    (org-ac/config-default))
+#+END_SRC
+
 ** Common settings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)
