@@ -542,7 +542,7 @@ Use GNU Guile as the interpreter.
 
 **** company
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook 'compagny-mode)
+  (add-hook 'python-mode-hook 'company-mode)
 
   (use-package company-jedi
     :ensure t
