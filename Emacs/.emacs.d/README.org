@@ -21,6 +21,7 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 - =sbcl=, for clisp completion and repl.
 - =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
+- =python-epc=, for use =python-jedi=.
 - =python-jedi=, for Python completion.
 
 ** Exporting
