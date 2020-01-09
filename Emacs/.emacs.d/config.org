@@ -21,6 +21,7 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 - =sbcl=, for clisp completion and repl.
 - =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
+- =python-jedi=, for Python completion.
 
 ** Exporting
 *** From the package manager
@@ -52,10 +53,10 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
 #+BEGIN_SRC emacs-lisp
   (require 'package)
   (setq package-enable-at-startup nil)
-  (setq package-archives '(("ELPA"  . "http://tromey.com/elpa/")
-                           ("gnu"   . "http://elpa.gnu.org/packages/")
+  (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
+                           ("org"   . "https://orgmode.org/elpa/")
                            ("melpa" . "https://melpa.org/packages/")
-                           ("org"   . "https://orgmode.org/elpa/")))
+                           ("ELPA"  . "http://tromey.com/elpa/")))
   (package-initialize)
 #+END_SRC
 
@@ -446,7 +447,6 @@ Requires libclang to be installed.
   (use-package company-racer
     :ensure t
     :config
-    (require 'company)
     (add-to-list 'company-backends 'company-racer))
 #+END_SRC
 *** Emacs Lisp
@@ -473,7 +473,6 @@ Requires libclang to be installed.
   (use-package slime-company
     :ensure t
     :init
-    (require 'company)
     (slime-setup '(slime-fancy slime-company)))
 #+END_SRC
 
@@ -507,7 +506,6 @@ Use GNU Guile as the interpreter.
   (use-package company-shell
     :ensure t
     :config
-    (require 'company)
     (add-hook 'shell-mode-hook 'shell-mode-company-init))
 #+END_SRC
 
@@ -533,8 +531,24 @@ Use GNU Guile as the interpreter.
   (use-package company-php
     :ensure t
     :config
-    (require 'company)
     (add-hook 'php-mode-hook 'php-mode-company-init))
+#+END_SRC
+
+*** Python
+**** flycheck
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'flycheck-mode)
+#+END_SRC
+
+**** company
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'python-mode-hook 'compagny-mode)
+
+  (use-package company-jedi
+    :ensure t
+    :config
+    (require 'company)
+    (add-to-list 'company-backends 'company-jedi))
 #+END_SRC
 
 * Org
