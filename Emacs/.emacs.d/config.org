@@ -17,8 +17,8 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 
 ** Programming
 *** From package manager
-- =clang=, for C/C++ completion.
-- =sbcl=, for clisp completion and repl.
+- =clang=, for C/C++ completion and =rtags=.
+- =sbcl=, for CLisp completion and REPL.
 - =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
 - =python-epc=, for use =python-jedi=.
@@ -26,7 +26,7 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 
 ** Exporting
 *** From the package manager
-+ =texlive=, for exportations using LaTeX.
++ =texlive= (or any other LaTeX distribution), for exportations using LaTeX.
 + =pygmentize=, for code highlighting when export to PDF.
 
 * Some notes
@@ -342,7 +342,7 @@ I prefer =C-n= and =C-p= to navigate around the items.
     :ensure t
     :config
     (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 3))
+    (setq company-minimum-prefix-length 2))
 
   (with-eval-after-load 'company
     (define-key company-active-map (kbd "M-n") nil)
@@ -354,6 +354,12 @@ I prefer =C-n= and =C-p= to navigate around the items.
 
 ** Specific languages
 *** C/C++
+**** cmake-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package cmake-mode
+    :ensure t)
+#+END_SRC
+
 **** yasnippet
 #+BEGIN_SRC emacs-lisp
   (add-hook 'c++-mode-hook 'yas-minor-mode)
@@ -393,6 +399,21 @@ Requires libclang to be installed.
     (add-hook 'c++-mode-hook 'irony-mode)
     (add-hook 'c-mode-hook 'irony-mode)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+#+END_SRC
+
+**** rtags
+After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
+#+BEGIN_SRC emacs-lisp
+  (use-package rtags
+      :ensure t)
+#+END_SRC
+
+**** cmake-ide
+#+BEGIN_SRC emacs-lisp
+  (use-package cmake-ide
+    :ensure t)
+
+  (cmake-ide-setup)
 #+END_SRC
 
 *** Rust
