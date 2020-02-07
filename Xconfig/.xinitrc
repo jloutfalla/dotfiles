@@ -67,7 +67,7 @@ xinput set-prop 11 281 1
 xinput set-prop 11 301 0.55
 
 dwmstatus 2>&1 >/dev/null &
-st &
+alacritty &
 firefox &
 
 exec dwm
