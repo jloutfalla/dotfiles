@@ -381,7 +381,16 @@ I prefer =C-n= and =C-p= to navigate around the items.
     :config
     (with-eval-after-load 'flycheck
       (require 'flycheck-clang-analyzer)
-      (flycheck-clang-analyzer-setup)))
+      (flycheck-clang-analyzer-setup)
+      (add-hook 'c++-mode-hook 'flycheck-mode)
+      (add-hook 'c-mode-hook 'flycheck-mode)))
+#+END_SRC
+
+**** rtags
+After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
+#+BEGIN_SRC emacs-lisp
+  (use-package rtags
+      :ensure t)
 #+END_SRC
 
 **** company
@@ -392,14 +401,21 @@ Requires libclang to be installed.
     (add-hook 'c-mode-hook 'company-mode))
 
   (use-package company-c-headers
-    :ensure t)
+    :ensure t
+    :config
+    (add-to-list 'company-backends 'company-c-headers))
+
+  (use-package company-rtags
+    :ensure t
+    :config
+    (setq rtags-completions-enabled t)
+    (add-to-list 'company-backends 'company-rtags))
 
   (use-package company-irony
     :ensure t
     :config
-    (setq company-backends '((company-c-headers
-			      company-dabbrev-code
-			      company-irony))))
+    (add-to-list 'company-backends 'company-dabbrev-code)
+    (add-to-list 'company-backends 'company-irony))
 
   (use-package irony
     :ensure t
@@ -407,13 +423,6 @@ Requires libclang to be installed.
     (add-hook 'c++-mode-hook 'irony-mode)
     (add-hook 'c-mode-hook 'irony-mode)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-#+END_SRC
-
-**** rtags
-After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
-#+BEGIN_SRC emacs-lisp
-  (use-package rtags
-      :ensure t)
 #+END_SRC
 
 **** cmake-ide
@@ -528,10 +537,10 @@ Use GNU Guile as the interpreter.
   (add-hook 'shell-mode-hook 'company-mode)
 
   (defun shell-mode-company-init ()
-    (setq-local company-backends '((company-shell
-				    company-shell-env
-				    comapny-etags
-				    company-dabbrev-code))))
+    (add-to-list 'company-backends 'company-shell)
+    (add-to-list 'company-backends 'company-shell-env)
+    (add-to-list 'company-backends 'comapny-etags)
+    (add-to-list 'company-backends 'company-dabbrev-code))
 
   (use-package company-shell
     :ensure t
@@ -556,7 +565,7 @@ Use GNU Guile as the interpreter.
   (add-hook 'php-mode-hook 'company-mode)
 
   (defun php-mode-company-init ()
-    (setq-local company-backends '(company-ac-php-backend)))
+    (add-to-list 'company-backends 'company-ac-php-backend))
 
   (use-package company-php
     :ensure t
