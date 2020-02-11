@@ -342,21 +342,30 @@ I prefer =C-n= and =C-p= to navigate around the items.
     :ensure t
     :init
     (setq company-backends '())
+    (add-to-list 'company-backends 'company-files)
+    (add-to-list 'company-backends 'company-cmake)
     (add-to-list 'company-backends 'company-c-headers)
     (add-to-list 'company-backends 'company-rtags)
+    (add-to-list 'company-backends 'company-dabbrev)
     (add-to-list 'company-backends 'company-dabbrev-code)
     (add-to-list 'company-backends 'company-irony)
     (add-to-list 'company-backends 'company-racer)
-    (add-to-list 'company-backends 'company-capf)
     (add-to-list 'company-backends 'company-shell)
     (add-to-list 'company-backends 'company-shell-env)
     (add-to-list 'company-backends 'comapny-etags)
+    (add-to-list 'company-backends 'company-capf)
     (add-to-list 'company-backends 'company-ac-php-backend)
     (add-to-list 'company-backends 'company-jedi)
     :config
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 2)
-    (global-company-mode 1))
+    (global-company-mode 1)
+    (global-set-key (kbd "M-TAB") 'company-complete))
+
+  (use-package company-quickhelp
+    :ensure t
+    :config
+    (company-quickhelp-mode))
 
   (with-eval-after-load 'company
     (define-key company-active-map (kbd "M-n") nil)
