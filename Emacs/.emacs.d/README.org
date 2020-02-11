@@ -317,14 +317,6 @@ Enables tab completions.
     (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
 
-** auto-complete
-#+BEGIN_SRC emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :config
-    (ac-config-default))
-#+END_SRC
-
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -348,9 +340,23 @@ I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
+    :init
+    (setq company-backends '())
+    (add-to-list 'company-backends 'company-c-headers)
+    (add-to-list 'company-backends 'company-rtags)
+    (add-to-list 'company-backends 'company-dabbrev-code)
+    (add-to-list 'company-backends 'company-irony)
+    (add-to-list 'company-backends 'company-racer)
+    (add-to-list 'company-backends 'company-capf)
+    (add-to-list 'company-backends 'company-shell)
+    (add-to-list 'company-backends 'company-shell-env)
+    (add-to-list 'company-backends 'comapny-etags)
+    (add-to-list 'company-backends 'company-ac-php-backend)
+    (add-to-list 'company-backends 'company-jedi)
     :config
     (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 2))
+    (setq company-minimum-prefix-length 2)
+    (global-company-mode 1))
 
   (with-eval-after-load 'company
     (define-key company-active-map (kbd "M-n") nil)
@@ -401,21 +407,15 @@ Requires libclang to be installed.
     (add-hook 'c-mode-hook 'company-mode))
 
   (use-package company-c-headers
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-c-headers))
+    :ensure t)
 
   (use-package company-rtags
     :ensure t
     :config
-    (setq rtags-completions-enabled t)
-    (add-to-list 'company-backends 'company-rtags))
+    (setq rtags-completions-enabled t))
 
   (use-package company-irony
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-dabbrev-code)
-    (add-to-list 'company-backends 'company-irony))
+    :ensure t)
 
   (use-package irony
     :ensure t
@@ -484,9 +484,7 @@ Requires libclang to be installed.
 **** company
 #+BEGIN_SRC emacs-lisp
   (use-package company-racer
-    :ensure t
-    :config
-    (add-to-list 'company-backends 'company-racer))
+    :ensure t)
 #+END_SRC
 *** Emacs Lisp
 **** eldoc
@@ -536,16 +534,8 @@ Use GNU Guile as the interpreter.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'shell-mode-hook 'company-mode)
 
-  (defun shell-mode-company-init ()
-    (add-to-list 'company-backends 'company-shell)
-    (add-to-list 'company-backends 'company-shell-env)
-    (add-to-list 'company-backends 'comapny-etags)
-    (add-to-list 'company-backends 'company-dabbrev-code))
-
   (use-package company-shell
-    :ensure t
-    :config
-    (add-hook 'shell-mode-hook 'shell-mode-company-init))
+    :ensure t)
 #+END_SRC
 
 *** PHP
@@ -564,13 +554,8 @@ Use GNU Guile as the interpreter.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'php-mode-hook 'company-mode)
 
-  (defun php-mode-company-init ()
-    (add-to-list 'company-backends 'company-ac-php-backend))
-
   (use-package company-php
-    :ensure t
-    :config
-    (add-hook 'php-mode-hook 'php-mode-company-init))
+    :ensure t)
 #+END_SRC
 
 *** Python
@@ -581,22 +566,22 @@ Use GNU Guile as the interpreter.
 
 **** company
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook 'company-mode)
+  ;; (add-hook 'python-mode-hook 'company-mode)
 
   (use-package company-jedi
     :ensure t
     :config
     (require 'company)
-    (add-to-list 'company-backends 'company-jedi))
+    (add-hook 'python-mode-hook 'jedi:setup))
 #+END_SRC
 
 * Org
-** auto-complete
+** Completion
 #+BEGIN_SRC emacs-lisp
-  (use-package org-ac
-    :ensure t
-    :config
-    (org-ac/config-default))
+  (defun add-pcomplete-to-capf ()
+    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+
+  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
 #+END_SRC
 
 ** Common settings
