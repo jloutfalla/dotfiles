@@ -63,8 +63,8 @@ redshift-gtk &
 feh --bg-scale Images/Wallpaper/wallpaper_reimu.jpg
 xss-lock -- i3lock -i "$HOME/Images/Wallpaper/wallpaper_hina.png" &
 
-xinput set-prop 11 281 1
-xinput set-prop 11 301 0.55
+xinput set-prop 12 301 1
+xinput set-prop 12 292 0.55
 
 dwmstatus 2>&1 >/dev/null &
 alacritty &
