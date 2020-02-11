@@ -300,6 +300,13 @@ Enables tab completions.
   (add-to-list 'completion-styles 'initials t)
 #+END_SRC
 
+** Popup kill-ring
+#+BEGIN_SRC emacs-lisp
+  (use-package popup-kill-ring
+    :ensure t
+    :bind ("M-y" . popup-kill-ring))
+#+END_SRC
+
 ** =beacon=
 #+BEGIN_SRC emacs-lisp
   (use-package beacon
