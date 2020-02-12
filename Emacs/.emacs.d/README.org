@@ -185,6 +185,7 @@ It can be really useful when you don't remember a long keybinding.
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
     :ensure t
+    :diminish
     :config
     (which-key-mode))
 #+END_SRC
@@ -249,7 +250,8 @@ Highlights hexadecimal codes that resembles a color in the appropriate color.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
     :ensure t
-    :hook (prog-mode))
+    :hook (prog-mode)
+    :diminish rainbow-mode)
 #+END_SRC
 
 *** Rainbow delimiters
@@ -320,8 +322,21 @@ Enables tab completions.
 #+BEGIN_SRC emacs-lisp
   (use-package beacon
     :ensure t
+    :diminish
     :config
     (beacon-mode 1))
+#+END_SRC
+
+** Hide some mode from the modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :ensure t
+    :config
+    (diminish 'linum-relative-mode)
+    (diminish 'subword-mode)
+    (diminish 'auto-fill-mode)
+    (diminish 'abbrev-mode)
+    (diminish 'eldoc-mode))
 #+END_SRC
 
 * Project management
@@ -362,6 +377,7 @@ Enables tab completions.
     :ensure t
     :after (yasnippet-snippets)
     :hook ((c-mode c++-mode emacs-lisp-mode shell-mode) . yas-minor-mode)
+    :diminish yas-minor-mode
     :config
     (yas-reload-all))
 
@@ -374,7 +390,8 @@ Enables tab completions.
   (use-package flycheck
     :ensure t
     :after (rust-mode)
-    :hook ((c-mode c++-mode shell-mode php-mode python-mode) . flycheck-mode))
+    :hook ((c-mode c++-mode shell-mode php-mode python-mode) . flycheck-mode)
+    :diminish)
 #+END_SRC
 
 ** company mode
