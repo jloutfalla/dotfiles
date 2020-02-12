@@ -325,29 +325,57 @@ Enables tab completions.
     (beacon-mode 1))
 #+END_SRC
 
+* Project management
+** Projectile
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :bind-keymap ("C-c p" . projectile-command-map)
+    :bind ("<f7>" . 'projectile-compile-project)
+    :init
+    (projectile-mode 1))
+#+END_SRC
+
+** Dashboard
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")
+    (setq dashboard-items '((recents . 5)
+                            (projects . 5))))
+
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+#+END_SRC
+
 * Programming
 ** magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure t
-    :config
-    (global-set-key (kbd "C-x g") 'magit-status))
+    :bind ("C-x g" . magit-status))
 #+END_SRC
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure t
+    :after (yasnippet-snippets)
+    :hook ((c-mode c++-mode emacs-lisp-mode shell-mode) . yas-minor-mode)
     :config
-    (use-package yasnippet-snippets
-      :ensure t)
     (yas-reload-all))
+
+  (use-package yasnippet-snippets
+      :ensure t)
 #+END_SRC
 
 ** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :ensure t)
+    :ensure t
+    :after (rust-mode)
+    :hook ((c-mode c++-mode shell-mode php-mode python-mode) . flycheck-mode))
 #+END_SRC
 
 ** company mode
