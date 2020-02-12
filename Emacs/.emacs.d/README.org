@@ -274,6 +274,7 @@ Enables relative line numbers for programming-related modes.
   (use-package linum-relative
     :ensure t
     :hook (prog-mode . linum-relative-mode)
+    :diminish
     :config
     (setq linum-relative-current-symbol "")
     (setq linum-relative-backend 'display-line-numbers-mode))
