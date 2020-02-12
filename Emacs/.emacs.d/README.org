@@ -72,6 +72,8 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-package-update
     :ensure t
+    :init
+    (setq auto-package-update-delete-old-versions t)
     :config
     (auto-package-update-maybe))
 #+END_SRC
