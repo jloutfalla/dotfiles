@@ -68,6 +68,14 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
     (package-install 'use-package))
 #+END_SRC
 
+** Automatic update packages
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-package-update
+    :ensure t
+    :config
+    (auto-package-update-maybe))
+#+END_SRC
+
 * Theme
 ** Base16 Tomorrow Night theme
 I use the Base16 Tomorrow Night theme because it doesn't mess up when Emacs is in the terminal.
