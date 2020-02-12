@@ -244,21 +244,20 @@ Enable automatic closing brackets, parentheses, quotation marks, ...
 #+END_SRC
 
 ** Rainbow
+*** Rainbow mode
 Highlights hexadecimal codes that resembles a color in the appropriate color.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
     :ensure t
-    :init
-    (add-hook 'prog-mode-hook 'rainbow-mode))
+    :hook (prog-mode))
 #+END_SRC
 
-** Rainbow delimiters
+*** Rainbow delimiters
 Color parentheses and other delimiters depending of their depth.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure t
-    :init
-    (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
 ** Show parens
@@ -272,10 +271,10 @@ Enables relative line numbers for programming-related modes.
 #+BEGIN_SRC emacs-lisp
   (use-package linum-relative
     :ensure t
+    :hook (prog-mode . linum-relative-mode)
     :config
     (setq linum-relative-current-symbol "")
-    (setq linum-relative-backend 'display-line-numbers-mode)
-    (add-hook 'prog-mode-hook 'linum-relative-mode))
+    (setq linum-relative-backend 'display-line-numbers-mode))
 #+END_SRC 
 
 ** Sub words
@@ -284,7 +283,7 @@ Makes Emacs considers camelCase strings as multiple words.
   (global-subword-mode 1)
 #+END_SRC
 
-** Replace the selected region
+** Replace The Selected region
 Enables replacing directly a selected region by what you type.
 #+BEGIN_SRC emacs-lisp
   (pending-delete-mode t)
@@ -385,7 +384,17 @@ I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
+    :hook ((emacs-lisp-mode shell-mode php-mode python-mode) . company-mode)
+    :bind (("M-<tab>" . 'company-complete)
+           :map company-active-map
+           ("M-n" . nil)
+           ("M-p" . nil)
+           ("C-n" . 'company-select-next)
+           ("C-p" . 'company-select-previous)
+           ("SCP" . 'company-abort))
     :init
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 2)
     (setq company-backends '())
     (add-to-list 'company-backends 'company-files)
     (add-to-list 'company-backends 'company-cmake)
@@ -402,22 +411,12 @@ I prefer =C-n= and =C-p= to navigate around the items.
     (add-to-list 'company-backends 'company-ac-php-backend)
     (add-to-list 'company-backends 'company-jedi)
     :config
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 2)
-    (global-company-mode 1)
-    (global-set-key (kbd "M-TAB") 'company-complete))
+    (global-company-mode 1))
 
   (use-package company-quickhelp
     :ensure t
     :config
     (company-quickhelp-mode))
-
-  (with-eval-after-load 'company
-    (define-key company-active-map (kbd "M-n") nil)
-    (define-key company-active-map (kbd "M-p") nil)
-    (define-key company-active-map (kbd "C-n") #'company-select-next)
-    (define-key company-active-map (kbd "C-p") #'company-select-previous)
-    (define-key company-active-map (kbd "SPC") #'company-abort))
 #+END_SRC
 
 ** Specific languages
@@ -428,22 +427,13 @@ I prefer =C-n= and =C-p= to navigate around the items.
     :ensure t)
 #+END_SRC
 
-**** yasnippet
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'c++-mode-hook 'yas-minor-mode)
-  (add-hook 'c-mode-hook 'yas-minor-mode)
-#+END_SRC
-
 **** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-clang-analyzer
     :ensure t
+    :after (flycheck)
     :config
-    (with-eval-after-load 'flycheck
-      (require 'flycheck-clang-analyzer)
-      (flycheck-clang-analyzer-setup)
-      (add-hook 'c++-mode-hook 'flycheck-mode)
-      (add-hook 'c-mode-hook 'flycheck-mode)))
+    (flycheck-clang-analyzer-setup))
 #+END_SRC
 
 **** rtags
@@ -456,10 +446,6 @@ After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
 **** company
 Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
-  (with-eval-after-load 'company
-    (add-hook 'c++-mode-hook 'company-mode)
-    (add-hook 'c-mode-hook 'company-mode))
-
   (use-package company-c-headers
     :ensure t)
 
@@ -473,10 +459,8 @@ Requires libclang to be installed.
 
   (use-package irony
     :ensure t
-    :config
-    (add-hook 'c++-mode-hook 'irony-mode)
-    (add-hook 'c-mode-hook 'irony-mode)
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+    :hook (((c-mode c++-mode) . irony-mode)
+           (irony-mode . irony-cdb-autosetup-compile-options)))
 #+END_SRC
 
 **** cmake-ide
@@ -492,12 +476,15 @@ Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
     :ensure t
+    :bind (:map rust-mode-map
+           ("<tab>" . #'company-indent-or-complete-common))
+    :hook ((rust-mode) . (lambda () (setq indent-tabs-mode nil)))
     :config
     (setq rust-format-mode-on-save t)
-    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-    (setq company-tooltip-align-annotations t)
-    (add-hook 'rust-mode-hook
-              (lambda () (setq indent-tabs-mode nil))))
+    ;; (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+    (setq company-tooltip-align-annotations t))
+    ;; (add-hook 'rust-mode-hook
+    ;;           (lambda () (setq indent-tabs-mode nil))))
 #+END_SRC
 
 **** rustfmt
@@ -509,30 +496,26 @@ Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
     :ensure t
-    :config
-    (with-eval-after-load 'flycheck
-      (require 'rust-mode)
-      (add-hook 'flycheck-mode-hook 'flycheck-rust-setup)
-      (add-hook 'rust-mode-hook 'flycheck-mode)))
+    :after (flycheck rust-mode)
+    :hook (((flycheck-mode) . flycheck-rust-setup)
+           ((rust-mode) . flycheck-mode)))
 #+END_SRC
 
 **** cargo
 #+BEGIN_SRC emacs-lisp
   (use-package cargo
     :ensure t
-    :config
-    (with-eval-after-load 'rust-mode
-      (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+    :after (rust-mode)
+    :hook (rust-mode . cargo-minor-mode))
 #+END_SRC
 
 **** racer
 #+BEGIN_SRC emacs-lisp
   (use-package racer
     :ensure t
-    :config
-    (add-hook 'rust-mode-hook 'racer-mode)
-    (add-hook 'racer-mode-hook 'eldoc-mode)
-    (add-hook 'racer-mode-hook 'company-mode))
+    :hook ((rust-mode . racer-mode)
+           (racer-mode . eldoc-mode)
+           (racer-mode . company-mode)))
 #+END_SRC
 
 **** company
@@ -540,21 +523,15 @@ Requires libclang to be installed.
   (use-package company-racer
     :ensure t)
 #+END_SRC
+
 *** Emacs Lisp
 **** eldoc
 #+BEGIN_SRC emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 #+END_SRC
 
-**** yasnippet
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook 'yas-minor-mode)
-#+END_SRC
-
 **** company
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook 'company-mode)
-
   (use-package slime
     :ensure t
     :config
@@ -574,20 +551,8 @@ Use GNU Guile as the interpreter.
 #+END_SRC
 
 *** Bash
-**** yasnippet
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'shell-mode-hook 'yas-minor-mode)
-#+END_SRC
-
-**** flycheck
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'shell-mode-hook 'flycheck-mode)
-#+END_SRC
-
 **** company
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'shell-mode-hook 'company-mode)
-
   (use-package company-shell
     :ensure t)
 #+END_SRC
@@ -599,34 +564,18 @@ Use GNU Guile as the interpreter.
     :ensure t)
 #+END_SRC
 
-**** flycheck
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'php-mode'hook 'flycheck-mode)
-#+END_SRC
-
 **** company
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'php-mode-hook 'company-mode)
-
   (use-package company-php
     :ensure t)
 #+END_SRC
 
 *** Python
-**** flycheck
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'python-mode-hook 'flycheck-mode)
-#+END_SRC
-
 **** company
 #+BEGIN_SRC emacs-lisp
-  ;; (add-hook 'python-mode-hook 'company-mode)
-
   (use-package company-jedi
     :ensure t
-    :config
-    (require 'company)
-    (add-hook 'python-mode-hook 'jedi:setup))
+    :hook (python-mode . jedi:setup))
 #+END_SRC
 
 * Org
