@@ -383,6 +383,21 @@ Enables tab completions.
     (projectile-mode 1))
 #+END_SRC
 
+*** Generate =.dir-locals.el= for =cmake-ide=
+#+BEGIN_SRC emacs-lisp
+  (defun cmake-dir-locals ()
+    "Create a .dir-locals.el file at the root of the project which set cmake-ide-build-dir to PROJECT_ROOT/build/"
+    (interactive)
+    (let ((s "((nil .
+    ((eval . (setq cmake-ide-build-dir
+                (concat (projectile-project-root)
+                        \"build/\"))))))")
+          (project-dir (projectile-project-root)))
+      (if project-dir
+          (with-temp-file (concat project-dir ".dir-locals.el") (insert s))
+        (message "Not in a project..."))))
+#+END_SRC
+
 ** Dashboard
 #+BEGIN_SRC emacs-lisp
   (use-package dashboard
