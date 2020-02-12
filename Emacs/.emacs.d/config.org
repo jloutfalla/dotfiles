@@ -286,7 +286,7 @@ Makes Emacs considers camelCase strings as multiple words.
   (global-subword-mode 1)
 #+END_SRC
 
-** Replace The Selected region
+** Replace the selected region
 Enables replacing directly a selected region by what you type.
 #+BEGIN_SRC emacs-lisp
   (pending-delete-mode t)
