@@ -191,6 +191,36 @@ It can be really useful when you don't remember a long keybinding.
 #+END_SRC
 
 * Minor conveniences
+** Search improvement
+*** Ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :diminish
+    :init
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "(%d%d) ")
+    :bind ("C-x b" . 'ivy-switch-buffer)
+    :config
+    (ivy-mode 1))
+#+END_SRC
+
+*** Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :ensure t
+    :diminish
+    :config
+    (counsel-mode 1))
+#+END_SRC
+
+*** Swiper
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+    :ensure t
+    :bind ("C-s" . 'swiper))
+#+END_SRC
+
 ** French spelling/grammar checker - Grammalecte
 Since I'm a french person, it can be useful to have it.
 After installing it, you need to run =flycheck-grammalecte-download-grammalecte=.
@@ -348,6 +378,8 @@ Enables tab completions.
     :bind-keymap ("C-c p" . projectile-command-map)
     :bind ("<f7>" . 'projectile-compile-project)
     :init
+    (setq projectile-completion-system 'ivy)
+    :config
     (projectile-mode 1))
 #+END_SRC
 
