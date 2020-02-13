@@ -484,6 +484,14 @@ I prefer =C-n= and =C-p= to navigate around the items.
     (company-quickhelp-mode))
 #+END_SRC
 
+*** Automatic detection of the indentation style
+#+BEGIN_SRC emacs-lisp
+  (use-package dtrt-indent
+    :ensure t
+    :config
+    (dtrt-indent-global-mode 1))
+#+END_SRC
+
 ** Specific languages
 *** C/C++
 **** cmake-mode
