@@ -43,6 +43,12 @@ stripped out and the remaining =config.el= is parsed.
 
 This is also the reason why your org-mode configuration should never be called =init.org=.
 
+* Setting personal informations
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Jean-Baptiste Loutfalla"
+        user-mail-address "jb.loutfalla@orange.fr")
+#+END_SRC
+
 * Needs at startup
 ** Garbage collection
 Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
