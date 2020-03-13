@@ -62,8 +62,7 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
   (setq package-enable-at-startup nil)
   (setq package-archives '(("gnu"   . "https://elpa.gnu.org/packages/")
                            ("org"   . "https://orgmode.org/elpa/")
-                           ("melpa" . "https://melpa.org/packages/")
-                           ("tromey"  . "http://tromey.com/elpa/")))
+                           ("melpa" . "https://melpa.org/packages/")))
   (package-initialize)
 #+END_SRC
 
