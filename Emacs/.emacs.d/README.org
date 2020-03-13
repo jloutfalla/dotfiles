@@ -424,10 +424,9 @@ Enables tab completions.
   (use-package yasnippet
     :ensure t
     :after (yasnippet-snippets)
-    :hook ((c-mode c++-mode emacs-lisp-mode shell-mode) . yas-minor-mode)
     :diminish yas-minor-mode
     :config
-    (yas-reload-all))
+    (yas-global-mode))
 
   (use-package yasnippet-snippets
       :ensure t)
@@ -443,7 +442,7 @@ Enables tab completions.
 #+END_SRC
 
 ** company mode
-The delay for company mode to kick in half a second and starts completion after 2 characters.
+The delay for company mode to kick in immediatly and starts completion after 2 characters.
 
 I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
