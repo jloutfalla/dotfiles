@@ -54,7 +54,6 @@ xss-lock -- i3lock -i "$HOME/Images/Wallpaper/wallpaper_hina.png" &
 xinput set-prop 12 301 1
 xinput set-prop 12 292 0.55
 
-emojione-picker &
 dwmstatus 2>&1 >/dev/null &
 alacritty &
 firefox &
