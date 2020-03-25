@@ -1,5 +1,4 @@
 # The following lines were added by compinstall
-HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 
