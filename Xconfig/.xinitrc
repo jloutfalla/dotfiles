@@ -9,12 +9,6 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 
 if [ -f $sysresources ]; then
 
-
-
-
-
-
-
     xrdb -merge $sysresources
 
 fi
@@ -24,12 +18,6 @@ if [ -f $sysmodmap ]; then
 fi
 
 if [ -f "$userresources" ]; then
-
-
-
-
-
-
 
     xrdb -merge "$userresources"
 
@@ -59,13 +47,14 @@ udiskie -As2 &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk &
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval "$(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)"
 feh --bg-scale Images/Wallpaper/wallpaper_reimu.jpg
 xss-lock -- i3lock -i "$HOME/Images/Wallpaper/wallpaper_hina.png" &
 
 xinput set-prop 12 301 1
 xinput set-prop 12 292 0.55
 
+emojione-picker &
 dwmstatus 2>&1 >/dev/null &
 alacritty &
 firefox &
