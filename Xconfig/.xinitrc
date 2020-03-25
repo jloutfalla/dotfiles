@@ -9,12 +9,6 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 
 if [ -f $sysresources ]; then
 
-
-
-
-
-
-
     xrdb -merge $sysresources
 
 fi
@@ -24,12 +18,6 @@ if [ -f $sysmodmap ]; then
 fi
 
 if [ -f "$userresources" ]; then
-
-
-
-
-
-
 
     xrdb -merge "$userresources"
 
@@ -53,7 +41,7 @@ udiskie -As2 &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk -l 45.750000:4.850000 & # Latitude and Longitude of Lyon
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval "$(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)"
 feh --bg-scale Images/Wallpaper/gnu.png
 xss-lock -- i3lock -i "$HOME/Images/Wallpaper/gnu-lock.png" &
 
