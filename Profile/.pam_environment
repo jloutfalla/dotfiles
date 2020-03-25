@@ -1,0 +1,10 @@
+# Setting XDG variables
+XDG_CACHE_HOME  DEFAULT=@{HOME}/.cache
+XDG_CONFIG_HOME DEFAULT=@{HOME}/.config
+XDG_DATA_HOME   DEFAULT=@{HOME}/.local/share
+
+# libice
+ICEAUTHORITY    DEFAULT=${XDG_DATA_HOME}/ICEauthority
+
+# SSH socket
+SSH_AUTH_SOCK DEFAULT="${XDG_RUNTIME_DIR}/ssh-agent.socket"

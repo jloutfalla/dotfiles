@@ -8,7 +8,7 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]} m:{[:lower:][:upp
 zstyle :compinstall filename '/home/shadowrises/.zshrc'
 
 autoload -Uz compinit
-compinit
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
 setopt appendhistory
@@ -21,7 +21,7 @@ then
     export TERM=dumb
 fi
 
-source "$HOME/.alias"
+source "$XDG_CONFIG_HOME/aliasrc"
 
 #------------------------------
 # My bindings Keybindings

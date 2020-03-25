@@ -8,3 +8,6 @@ alias grep='grep --color=auto'
 alias e='emacsclient -c -n'
 alias eeval='emacsclient -e'
 alias et='emacsclient -t'
+
+alias mvn='mvn -gs "$XDG_CONFIG_HOME/maven/settings.xml"'
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
