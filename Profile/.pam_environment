@@ -6,5 +6,8 @@ XDG_DATA_HOME   DEFAULT=@{HOME}/.local/share
 # libice
 ICEAUTHORITY    DEFAULT=${XDG_DATA_HOME}/ICEauthority
 
+# XAuthority
+XAUTHORITY      DEFAULT=${XDG_RUNTIME_DIR}/Xauthority
+
 # SSH socket
-SSH_AUTH_SOCK DEFAULT="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+SSH_AUTH_SOCK   DEFAULT=${XDG_RUNTIME_DIR}/ssh-agent.socket
