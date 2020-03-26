@@ -20,7 +20,6 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export LESSHISTFILE="-"
-export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
 export MYSQL_HISTFILE="$XDG_DATA_HOME/mysql_history"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
