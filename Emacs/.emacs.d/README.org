@@ -564,6 +564,12 @@ Requires libclang to be installed.
   (cmake-ide-setup)
 #+END_SRC
 
+**** GLSL
+#+BEGIN_SRC emacs-lisp
+  (use-package glsl-mode
+    :ensure t)
+#+END_SRC
+
 *** Rust
 **** rust-mode
 #+BEGIN_SRC emacs-lisp
