@@ -43,7 +43,7 @@ export AWT_TOOLKIT="MToolkit"
 wmname LG3D
 
 
-udiskie -ant &
+udiskie -s &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk &
