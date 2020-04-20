@@ -736,9 +736,10 @@ This will allow syntax highlighting in the code in PDFs. I use the =minted= pack
 =pdflatex= usually disallows shell command so this will enables that :
 #+BEGIN_SRC emacs-lisp
   (setq org-latex-pdf-process
-        '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-          "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+        '("xelatex --shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex --shell-escape -interaction nonstopmode -output-directory %o %f"
+          "xelatex --shell-escape -interaction nonstopmode -output-directory %o %f"
+          "pdflatex --shell-escape --batch %f"))
 #+END_SRC
 
 Include the =minted= package in all my LaTeX exports.
