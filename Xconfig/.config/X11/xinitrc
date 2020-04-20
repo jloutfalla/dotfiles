@@ -37,7 +37,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 
-udiskie -As2 &
+udiskie -ant &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk -l 45.750000:4.850000 & # Latitude and Longitude of Lyon
