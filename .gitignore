@@ -7,3 +7,4 @@ Zsh/.config/zsh/*
 
 Scripts/.local/*
 !Scripts/.local/bin
+Scripts/.local/bin/pip*
