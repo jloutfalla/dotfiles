@@ -14,6 +14,10 @@ setopt appendhistory
 # End of lines configured by zsh-newuser-install
 
 
+export GPG_TTY="$(tty)"
+gpg-connect-agent updatestartuptty /bye > /dev/null
+
+
 # This allows running `shell` properly within Emacs
 if [ -n "$INSIDE_EMACS" ];
 then
@@ -129,9 +133,6 @@ PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magent
 
 # To activate thefuck
 eval $(thefuck --alias)
-
-# SSH
-eval $(ssh-agent) > /dev/null
 
 # Cirnosay
 cirnosay-script
