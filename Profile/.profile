@@ -34,7 +34,7 @@ unset SSH_AGENT_PID
 GPG_SSH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 if [ "${gnu_SSH_AUTH_SOCK_by-0}" -ne $$ ]
 then
-    export SSH_AUTH_SOCK="$GPG_SSH_SOCK" && echo "$SSH_AUTH_SOCK"
+    export SSH_AUTH_SOCK="$GPG_SSH_SOCK"
     gpgconf --launch gpg-agent
 fi
 
