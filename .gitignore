@@ -4,3 +4,6 @@ Emacs/.emacs.d/*
 
 Zsh/.config/zsh/*
 !Zsh/.config/zsh/.zshrc
+
+Scripts/.local/*
+!Scripts/.local/bin

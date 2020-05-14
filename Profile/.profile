@@ -28,7 +28,17 @@ export _Z_DATA="$XDG_DATA_HOME/z"
 export ZDOTDIR="$HOME/.config/zsh"
 export HISTFILE="$XDG_DATA_HOME/zsh/history"
 
- 
+
+# Set SSH_AUTH_SOCK to the GPG Agent socket
+unset SSH_AGENT_PID
+GPG_SSH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+if [ "${gnu_SSH_AUTH_SOCK_by-0}" -ne $$ ]
+then
+    export SSH_AUTH_SOCK="$GPG_SSH_SOCK" && echo "$SSH_AUTH_SOCK"
+    gpgconf --launch gpg-agent
+fi
+
+
 if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR"  ] && [ "$XDG_VTNR" -eq 1 ]
 then
     startx "$XDG_CONFIG_HOME/X11/xinitrc"
