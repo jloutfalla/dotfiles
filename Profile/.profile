@@ -38,7 +38,7 @@ export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export _Z_DATA="$XDG_DATA_HOME/z"
 export ZDOTDIR="$HOME/.config/zsh"
-export HISTFILE="$XDG_DATA_HOME/zsh/history"
+export HISTFILE="$XDG_DATA_HOME/history"
 
 
 # Set SSH_AUTH_SOCK to the GPG Agent socket

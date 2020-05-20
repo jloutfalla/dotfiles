@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # ~/.bashrc
 #
@@ -11,13 +12,13 @@ BASE16_SHELL="$HOME/.config/base16-shell"
     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
-PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
+PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\w\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 
 
-source "$XDG_CONFIG_HOME/aliasrc"
+. "$XDG_CONFIG_HOME/aliasrc"
 
 
-eval $(thefuck --alias)
+eval "$(thefuck --alias)"
 
 
 if [ -n "$DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]

@@ -1,10 +1,11 @@
+#!/bin/sh
 #
 # ~/.bash_profile
 #
 
-source "$HOME/.profile"
+. "$HOME/.profile"
 
-[[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
+[ "$PS1" ] && [ -f /usr/share/bash-completion/bash_completion ] && \
     . /usr/share/bash-completion/bash_completion
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+[ -f "$HOME/.bashrc" ] && . "$HOME/.bashrc"
