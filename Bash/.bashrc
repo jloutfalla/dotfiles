@@ -18,5 +18,13 @@ PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\
 . "$XDG_CONFIG_HOME/aliasrc"
 
 
+# GPG Agent
+export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye >/dev/null
+
+
+# To activate z
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
 eval "$(thefuck --alias)"
 
