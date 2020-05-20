@@ -14,6 +14,7 @@ setopt appendhistory
 # End of lines configured by zsh-newuser-install
 
 
+# GPG Agent
 export GPG_TTY="$(tty)"
 gpg-connect-agent updatestartuptty /bye > /dev/null
 
