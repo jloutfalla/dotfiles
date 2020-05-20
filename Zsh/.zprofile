@@ -1,5 +1,6 @@
+#!/bin/sh
 #
 # ~/.zshprofile
 #
 
-source "$HOME/.profile"
+. "$HOME/.profile"
