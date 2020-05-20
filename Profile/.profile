@@ -11,7 +11,7 @@ fi
 # Default programs
 export EDITOR="emacsclient -t -a vim"
 export VISUAL="emacsclient -c -a emacs"
-export TERMINAL="alacritty"
+export TERMINAL="st"
 export BROWSER="icecat"
 
 # Clean of ~/ :
