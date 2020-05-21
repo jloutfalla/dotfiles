@@ -47,15 +47,15 @@ udiskie -s &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk &
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 & eval "$(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)"
-feh --no-fehbg --bg-scale "$HOME/Images/Wallpaper/wallpaper_reimu.jpg"
-xss-lock -- i3lock -i "$HOME/Images/Wallpaper/wallpaper_hina.png" &
 
-xinput set-prop 12 301 1
-xinput set-prop 12 292 0.55
+feh --no-fehbg --bg-scale "$HOME/Pictures/Wallpaper/wallpaper_reimu.jpg"
+xss-lock -- i3lock -i "$HOME/Pictures/Wallpaper/wallpaper_hina.png" &
+
+xinput set-prop 12 303 1
+xinput set-prop 12 294 0.55
 
 dwmstatus 2>&1 >/dev/null &
-alacritty &
+st &
 firefox &
 
 exec dwm
