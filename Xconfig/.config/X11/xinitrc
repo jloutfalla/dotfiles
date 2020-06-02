@@ -55,7 +55,7 @@ xinput set-prop 12 303 1
 xinput set-prop 12 294 0.55
 
 dwmstatus 2>&1 >/dev/null &
-st &
+st -e scroll &
 firefox &
 
 exec dwm
