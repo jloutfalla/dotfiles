@@ -1,3 +1,2 @@
-set number
+set number relativenumber
 syntax on
-set expandtab shiftwidth=4 softtabstop=4
