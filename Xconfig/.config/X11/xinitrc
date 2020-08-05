@@ -47,6 +47,6 @@ feh --no-fehbg --bg-scale "$HOME/Pictures/Wallpaper/gnu.png"
 xss-lock -- i3lock -i "$HOME/Pictures/Wallpaper/gnu-lock.png" &
 
 dwmstatus 2>&1 >/dev/null &
-st -t "st" -e scroll &
+st &
 
 exec dwm
