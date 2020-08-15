@@ -512,6 +512,16 @@ I prefer =C-n= and =C-p= to navigate around the items.
     (dtrt-indent-global-mode 1))
 #+END_SRC
 
+*** Display an indicator for the fill column
+#+BEGIN_SRC emacs-lisp
+  (use-package fill-column-indicator
+    :ensure t
+    :config
+    (setq fci-rule-column 80)
+    (setq fci-color "dim gray")
+    (add-hook 'prog-mode-hook #'fci-mode))
+#+END_SRC
+
 ** Specific languages
 *** C/C++
 **** cmake-mode
@@ -738,7 +748,9 @@ Don't include a footer with my contact and publishing information.
 #+END_SRC
 
 *** Exporting to PDF
-This will allow syntax highlighting in the code in PDFs. I use the =minted= package, but if it shells out to =pygments= to do the actual work.
+This will allow syntax highlighting in the code in PDFs. I use the
+=minted= package, but if it shells out to =pygments= to do the actual
+work.
 =pdflatex= usually disallows shell command so this will enables that :
 #+BEGIN_SRC emacs-lisp
   (setq org-latex-pdf-process
