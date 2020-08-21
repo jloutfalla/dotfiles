@@ -11,3 +11,4 @@ XAUTHORITY      DEFAULT=${XDG_RUNTIME_DIR}/Xauthority
 
 # SSH socket
 SSH_AUTH_SOCK   DEFAULT=${XDG_RUNTIME_DIR}/ssh-agent.socket
+
