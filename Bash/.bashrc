@@ -24,7 +24,7 @@ gpg-connect-agent updatestartuptty /bye >/dev/null
 
 
 # To activate z
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+[ -r "/usr/share/z/z.sh" ] && source /usr/share/z/z.sh
 
 eval "$(thefuck --alias)"
 

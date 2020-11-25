@@ -50,6 +50,8 @@ then
     gpgconf --launch gpg-agent
 fi
 
+[ "$(pgrep -fc 'emacs --.*daemon')" -eq 0 ] && \
+	emacs --daemon &
 
 if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR"  ] && [ "$XDG_VTNR" -eq 1 ]
 then
