@@ -38,6 +38,8 @@ then
     gpgconf --launch gpg-agent
 fi
 
+[ "$(pgrep -fc 'emacs --.*daemon')" -eq 0 ] && \
+	emacs --daemon &
 
 # Set SSH_AUTH_SOCK to the GPG Agent socket
 unset SSH_AGENT_PID

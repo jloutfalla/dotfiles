@@ -1,0 +1,12 @@
+#!/bin/sh
+
+FRAME=$(emacsclient -e "(member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))" 2> /dev/null)
+[ "$FRAME" = "nil" ] && OPTS="-c"
+
+if [ -n "$OPTS" ]
+then
+    emacsclient -n "$OPTS" "$@"
+else
+    emacsclient -n "$@"
+fi
+
