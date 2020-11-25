@@ -5,8 +5,8 @@ FRAME=$(emacsclient -e "(member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-d
 
 if [ -n "$OPTS" ]
 then
-    emacsclient -n "$OPTS" "$@"
+    emacsclient -n -a emacs "$OPTS" "$@"
 else
-    emacsclient -n "$@"
+    emacsclient -n -a emacs "$@"
 fi
 
