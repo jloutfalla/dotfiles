@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# A dmenu prompt to get the sudo password
+# Foreground and background colors are set to be the same to hide the text
+
+dmenu -p "Password" -fn "monospace:size=08" -nf "#222" -nb "#222" <&- && echo
