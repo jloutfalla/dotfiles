@@ -37,6 +37,8 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 
+export SUDO_ASKPASS="$HOME/.local/bin/dpass" # Set the sudo prompt to use dpass
+
 # For JetBrains IDEs to work
 export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT="MToolkit"
@@ -47,7 +49,7 @@ udiskie -s &
 picom --no-fading-openclose &
 nm-applet &
 redshift-gtk &
-fcitix &
+fcitx &
 
 feh --no-fehbg --bg-scale "$HOME/Pictures/Wallpaper/wallpaper_reimu.jpg"
 xss-lock -- i3lock -i "$HOME/Pictures/Wallpaper/wallpaper_hina.png" &
