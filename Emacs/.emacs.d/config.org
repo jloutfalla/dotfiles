@@ -177,6 +177,16 @@ Use of asynchronous processes wherever it's possible.
     (dired-async-mode 1))
 #+END_SRC
 
+*** EasyPG
+Allow Emacs to be use for pinentry of GnuPG
+#+BEGIN_SRC emacs-lisp
+  (use-package pinentry
+    :ensure t
+    :config
+    (setq epa-pinentry-mode 'loopback)
+    (pinentry-start))
+#+END_SRC
+
 * Terminal
 ** Setting default Shell to Zsh
 #+BEGIN_SRC emacs-lisp
@@ -415,15 +425,21 @@ Enables tab completions.
 
 ** Dashboard
 #+BEGIN_SRC emacs-lisp
+  (defun start-dashboard ()
+    "Starts dashboard
+  This definition is to be used with `emacs --daemon'"
+    (dashboard-setup-startup-hook)
+    (setq dashboard-items '((recents . 5)
+                            (projects . 5)))
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+
   (use-package dashboard
     :ensure t
+    :after projectile
     :config
-    (dashboard-setup-startup-hook)
-    (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png")
-    (setq dashboard-items '((recents . 5)
-                            (projects . 5))))
+    (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png"))
 
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (start-dashboard)
 #+END_SRC
 
 * Programming
