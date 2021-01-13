@@ -596,6 +596,15 @@ Requires libclang to be installed.
 #+END_SRC
 
 *** Rust
+**** Environment variables
+#+BEGIN_SRC emacs-lisp
+  (setenv "RUSTUP_HOME"
+          (concat (getenv "XDG_DATA_HOME") "/rustup"))
+
+  (setenv "CARGO_HOME"
+          (concat (getenv "XDG_DATA_HOME") "/cargo"))
+#+END_SRC
+
 **** rust-mode
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
@@ -750,7 +759,9 @@ Don't include a footer with my contact and publishing information.
 #+END_SRC
 
 *** Exporting to PDF
-This will allow syntax highlighting in the code in PDFs. I use the =minted= package, but if it shells out to =pygments= to do the actual work.
+This will allow syntax highlighting in the code in PDFs. I use the
+=minted= package, but if it shells out to =pygments= to do the actual
+work.
 =pdflatex= usually disallows shell command so this will enables that :
 #+BEGIN_SRC emacs-lisp
   (setq org-latex-pdf-process
