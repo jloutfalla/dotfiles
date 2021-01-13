@@ -515,7 +515,8 @@ I prefer =C-n= and =C-p= to navigate around the items.
 ** Programming style
 *** Style
 #+BEGIN_SRC emacs-lisp
-  (setq-default c-default-style "linux")
+  (setq-default c-default-style "gnu"
+                c-basic-offset 2)
 #+END_SRC
 
 *** Automatic detection of the indentation style
@@ -524,6 +525,16 @@ I prefer =C-n= and =C-p= to navigate around the items.
     :ensure t
     :config
     (dtrt-indent-global-mode 1))
+#+END_SRC
+
+*** Display an indicator for the fill column
+#+BEGIN_SRC emacs-lisp
+  (use-package fill-column-indicator
+    :ensure t
+    :config
+    (setq fci-rule-column 80)
+    (setq fci-color "dim gray")
+    (add-hook 'prog-mode-hook #'fci-mode))
 #+END_SRC
 
 ** Specific languages

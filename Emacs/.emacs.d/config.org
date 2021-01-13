@@ -515,7 +515,8 @@ I prefer =C-n= and =C-p= to navigate around the items.
 ** Programming style
 *** Style
 #+BEGIN_SRC emacs-lisp
-  (setq-default c-default-style "linux")
+  (setq-default c-default-style "gnu"
+                c-basic-offset 2)
 #+END_SRC
 
 *** Automatic detection of the indentation style
