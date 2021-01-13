@@ -19,7 +19,6 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 *** From package manager
 - =clang=, for C/C++ completion and =rtags=.
 - =sbcl=, for CLisp completion and REPL.
-- =php=, for PHP check.
 - =racer= and =rustfmt=, for Rust completion and format.
 - =python-epc=, for use =python-jedi=.
 - =python-jedi=, for Python completion.
@@ -452,7 +451,7 @@ Enables tab completions.
   (use-package flycheck
     :ensure t
     :after (rust-mode)
-    :hook ((c-mode c++-mode shell-mode php-mode python-mode) . flycheck-mode)
+    :hook ((c-mode c++-mode shell-mode python-mode) . flycheck-mode)
     :diminish)
 #+END_SRC
 
@@ -463,7 +462,7 @@ I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
   (use-package company
     :ensure t
-    :hook ((emacs-lisp-mode shell-mode php-mode python-mode) . company-mode)
+    :hook ((emacs-lisp-mode shell-mode python-mode) . company-mode)
     :bind (("M-<tab>" . 'company-complete)
            :map company-active-map
            ("M-n" . nil)
@@ -487,7 +486,6 @@ I prefer =C-n= and =C-p= to navigate around the items.
     (add-to-list 'company-backends 'company-shell-env)
     (add-to-list 'company-backends 'company-etags)
     (add-to-list 'company-backends 'company-capf)
-    (add-to-list 'company-backends 'company-ac-php-backend)
     (add-to-list 'company-backends 'company-jedi)
     :config
     (global-company-mode 1))
@@ -653,19 +651,6 @@ Use GNU Guile as the interpreter.
 **** company
 #+BEGIN_SRC emacs-lisp
   (use-package company-shell
-    :ensure t)
-#+END_SRC
-
-*** PHP
-**** php-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package php-mode
-    :ensure t)
-#+END_SRC
-
-**** company
-#+BEGIN_SRC emacs-lisp
-  (use-package company-php
     :ensure t)
 #+END_SRC
 
