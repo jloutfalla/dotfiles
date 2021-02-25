@@ -596,15 +596,6 @@ Requires libclang to be installed.
 #+END_SRC
 
 *** Rust
-**** Environment variables
-#+BEGIN_SRC emacs-lisp
-  (setenv "RUSTUP_HOME"
-          (concat (getenv "XDG_DATA_HOME") "/rustup"))
-
-  (setenv "CARGO_HOME"
-          (concat (getenv "XDG_DATA_HOME") "/cargo"))
-#+END_SRC
-
 **** rust-mode
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
