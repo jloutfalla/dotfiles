@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Add scripts to the PATH
 if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -q -v "$HOME/.local/bin"
 then
 
@@ -14,16 +15,27 @@ export VISUAL="open-emacsclient"
 export TERMINAL="st"
 export BROWSER="icecat"
 
+# Allow Qt to change theme
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+# Set the sudo prompt to use dpass
+export SUDO_ASKPASS="$HOME/.local/bin/dpass"
+
+# Fix Java application windows
+export _JAVA_AWT_WM_NONREPARENTING=1
+export AWT_TOOLKIT="MToolkit"
+
 # Clean of ~/ :
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"
-export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=$XDG_CONFIG_HOME/java"
 export LESSHISTFILE="-"
 export MYSQL_HISTFILE="$XDG_DATA_HOME/mysql_history"
 export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/library"
+RUST_SRC_PATH="$(rustc --print sysroot)"
+export RUST_SRC_PATH="$RUST_SRC_PATH/lib/rustlib/src/rust/library"
 export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
 export _Z_DATA="$XDG_DATA_HOME/z"
 export ZDOTDIR="$HOME/.config/zsh"
@@ -56,4 +68,3 @@ if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR"  ] && [ "$XDG_VTNR" -eq 1 ]
 then
     startx "$XDG_CONFIG_HOME/X11/xinitrc"
 fi
-
