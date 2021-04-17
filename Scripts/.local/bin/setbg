@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# A script to simply set a wallpaper and link it to "$XDG_DATA_HOME/bg"
+# and run pywal to change the color scheme if installed.
+
+# Arguments:
+#     None -- Set the image pointed by "$XDG_DATA_HOME/bg"
+#     img  -- Set the image "img"
+#     dir  -- Set a random image from the directory "dir"
+
+bgimage="$XDG_DATA_HOME/bg"
+
+trueloc="$(readlink -f "$1")" &&
+    case "$(file --mime-type -b "$trueloc")" in
+        image/* )
+            ln -sf "$trueloc" "$bgimage" ;;
+        inode/directory )
+            ls -sf "$(find "$trueloc" -iregex '.*.\(jpg\|jpeg\|png\|gif\)' -type f | shuf -n 1)" "$bgimage" ;;
+        * )
+            echo "Not a valid image." >&2
+            exit 1
+            ;;
+    esac
+
+if [ -z "$trueloc" ] && [ ! -f "$bgimage" ]
+then
+    echo "No fallback image." >&2
+    exit 1
+elif [ -z "$trueloc" ]
+then
+    trueloc="$(realpath "$bgimage")"
+fi
+
+if which wal > /dev/null
+then
+    wal -i "$trueloc" -o "$XDG_CONFIG_HOME/wal/postrun" > /dev/null
+fi
+
+xwallpaper --zoom "$bgimage"

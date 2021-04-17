@@ -9,15 +9,12 @@ This repo is organized to use =GNU Stow=. If you want to make it easy
 to use, make sure that the package =stow= is installed.
 
 * Dependencies
-I use [[https://github.com/chriskempson/base16-shell][base16-shell]] to set my shell's default ANSI colors.
-
-To setup =base16-shell= :
-#+BEGIN_SRC shell
-  $ base16_ # hit tab to complete with the theme that you want
-#+END_SRC
+To setup my wallpapers I use 2 greate tools:
+- [[https://github.com/dylanaraps/pywal/][pywal]] -- which create a color scheme from an image
+- [[https://github.com/stoeckmann/xwallpaper][xwallpaper]] -- which sets an image as the wallpaper
 
 * Setup
-If you don't know how to use =GNU Stow=, here the basic command :
+If you don't know how to use =GNU Stow=, here's the basic command:
 #+BEGIN_SRC shell
   $ stow FOLDER [FOLDER2 ...]
 #+END_SRC

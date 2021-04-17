@@ -1,0 +1,19 @@
+#!/bin/sh
+
+setbg &
+
+udiskie -s &
+picom --no-fading-openclose &
+nm-applet &
+redshift-gtk -l 45.750000:4.850000 &
+fcitx &
+
+xss-lock -- i3lock -i "$HOME/Pictures/Wallpaper/wallpaper_hina.png" &
+
+# Trackpad : taping enable and mouse speed
+xinput set-prop 12 331 1
+xinput set-prop 12 322 0.55
+
+dwmstatus >/dev/null 2>&1 &
+
+firefox &
