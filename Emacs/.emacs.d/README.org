@@ -416,7 +416,7 @@ Enables tab completions.
     (let ((s "((nil .
     ((eval . (setq cmake-ide-build-dir
                 (concat (projectile-project-root)
-                        \"build/\"))))))")
+                        \"build/\"))))))\n")
           (project-dir (projectile-project-root)))
       (if project-dir
           (with-temp-file (concat project-dir ".dir-locals.el") (insert s))
