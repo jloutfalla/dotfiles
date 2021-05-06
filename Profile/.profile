@@ -54,6 +54,8 @@ export ZDOTDIR="$HOME/.config/zsh"
 export HISTFILE="$XDG_DATA_HOME/history"
 export OCTAVE_HISTFILE="$XDG_CACHE_HOME/octave-hsts"
 export OCTAVE_SITE_INITFILE="$XDG_CONFIG_HOME/octave/octaverc"
+export CABAL_CONFIG="$XDG_CONFIG_HOME/cabal/config"
+export CABAL_DIR="$XDG_CACHE_HOME/cabal"
 
 
 # Set SSH_AUTH_SOCK to the GPG Agent socket

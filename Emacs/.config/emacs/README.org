@@ -22,6 +22,8 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 - =racer= and =rustfmt=, for Rust completion and format.
 - =python-epc=, for use =python-jedi=.
 - =python-jedi=, for Python completion.
+- =ghci=, for Haskell inferior processus.
+- =stylish-haskell=, for Haskell autoformating.
 
 ** Exporting
 *** From the package manager
@@ -37,10 +39,12 @@ on launch and downloads it and installs if necessary.
 ** On the format of the configuration
 As you may have notices, this is the configuration file itself.
 This configuration is written in =org-mode=.
-On launch, this file is being sourced into =~/.emacs.d/init.el=, the prosed will be automatically
-stripped out and the remaining =config.el= is parsed.
+On launch, this file is being sourced into =$XDG_CONFIG_HOME/init.el=,
+the prosed will be automatically stripped out and the remaining
+=config.el= is parsed.
 
-This is also the reason why your org-mode configuration should never be called =init.org=.
+This is also the reason why your org-mode configuration should never
+be called =init.org=.
 
 * Setting personal informations
 #+BEGIN_SRC emacs-lisp
@@ -128,7 +132,7 @@ There are some setting that do not depend on packages and are built-in enhanceme
 
 *** Highlight current line
 #+BEGIN_SRC emacs-lisp
-  (when window-system (global-hl-line-mode t))
+  (when (display-graphic-p) (global-hl-line-mode t))
 #+END_SRC
 
 *** Cursor position
@@ -136,6 +140,14 @@ Show in the mini-buffer the current line and column number of the cursor.
 #+BEGIN_SRC emacs-lisp
   (setq line-number-mode t)
   (setq column-number-mode t)
+#+END_SRC
+
+*** Allow frames to cover the entire screen
+In dwm, sometimes emacs frames does not cover the screen so to make
+make it happen we need to change the value of =frame-resize-pixelwise=
+to a non-nil value.
+#+BEGIN_SRC emacs-lisp
+  (setq frame-resize-pixelwise t)
 #+END_SRC
 
 ** Functionality
@@ -187,17 +199,18 @@ Allow Emacs to be use for pinentry of GnuPG
 #+END_SRC
 
 * Terminal
-** Setting default Shell to Zsh
+** Setting default Shell
+For conveniences I prefer to set the Shell with a variable.
 #+BEGIN_SRC emacs-lisp
-  (defvar my-terminal-shell "/bin/zsh")
+  (defvar my-terminal-shell "/bin/bash")
   (defadvice ansi-term (before force-bash)
     (interactive (list my-terminal-shell)))
   (ad-activate 'ansi-term)
 #+END_SRC
 
 ** Keybinding
-Since I use i3 and the default keybinding to open a terminal is =S-Return=,
-I can use this in Emacs to open a terminal.
+Since I use dwm and the default keybinding I set to open a terminal is
+=S-Return=, I can't use it anymore in Emacs to open a terminal.
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "<C-return>") 'ansi-term)
 #+END_SRC
@@ -266,9 +279,10 @@ After installing it, you need to run =flycheck-grammalecte-download-grammalecte=
 Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
 #+BEGIN_SRC emacs-lisp
   (defun edit-config ()
-    "Edit/Open ~/.emacs.d/config.org"
+    "Edit/Open $XDG_CONFIG_HOME/emacs/config.org"
     (interactive)
-    (setq-local config-file "~/.emacs.d/config.org")
+    (setq-local config-file
+                (concat (getenv "XDG_CONFIG_HOME") "/emacs/config.org"))
     (when (file-readable-p config-file)
       (find-file config-file)))
 
@@ -279,9 +293,10 @@ Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
 Simply pressing =C-c r= will reload this file. You can also invoke =config-reload=.
 #+BEGIN_SRC emacs-lisp
   (defun config-reload ()
-    "Reloads ~/.emacs.d/config.org at runtime"
+    "Reloads $XDG_CONFIG_HOME/emacs/config.org at runtime"
     (interactive)
-    (setq-local config-file "~/.emacs.d/config.org")
+    (setq-local config-file
+                (concat (getenv "XDG_CONFIG_HOME") "/emacs/config.org"))
     (when (file-readable-p config-file)
       (org-babel-load-file (expand-file-name config-file))))
 
@@ -394,6 +409,14 @@ Enables tab completions.
     (diminish 'eldoc-mode))
 #+END_SRC
 
+** =comment-line= keybinding
+The keybinding to apply =comment-line= is =C-x C-;= but when Emacs is
+open in a terminal window, this keybind is not achievable so I replace
+the binding of the =comment-set-column= in this case.
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x ;") 'comment-line)
+#+END_SRC
+
 * Project management
 ** Projectile
 #+BEGIN_SRC emacs-lisp
@@ -436,12 +459,43 @@ Enables tab completions.
     :ensure t
     :after projectile
     :config
-    (setq dashboard-startup-banner "~/.emacs.d/img/dashLogo.png"))
+    (setq dashboard-startup-banner
+          (concat (getenv "XDG_CONFIG_HOME") "/emacs/img/dashLogo.png")))
 
   (start-dashboard)
 #+END_SRC
 
 * Programming
+** GPLv3
+Insert the short text of the GPLv3 at the beginning of the file.
+#+BEGIN_SRC emacs-lisp
+  (defun insert-gpl (description)
+    "Insert the brief of the GNU GPLv3."
+    (interactive "sShort description: ")
+    (setq-local current-year (format-time-string "%Y"))
+    (save-excursion
+      (beginning-of-buffer)
+      (insert
+       (format
+  "/* %s
+
+     Copyright (C) %s %s <%s>
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program. If not, see <http://www.gnu.org/licenses/>. */
+
+  " description current-year user-full-name user-mail-address))))
+#+END_SRC
+
 ** magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -672,6 +726,30 @@ Requires libclang to be installed.
 Use GNU Guile as the interpreter.
 #+BEGIN_SRC emacs-lisp
   (setq scheme-program-name "guile")
+#+END_SRC
+
+*** Haskell
+**** haskell-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :ensure t
+    :bind (:map haskell-mode-map
+                ("C-c C-c" . haskell-compile)
+                ("C-c C-l" . haskell-process-load-or-reload)
+                ("C-`" . haskell-interactive-bring)
+                ("C-c C-t" . haskell-process-do-type)
+                ("C-c C-i" . haskell-process-do-info)
+                ("C-c c" . haskell-process-cabal))
+    :hook ((haskell-mode . interactive-haskell-mode)
+           (haskell-mode . hindent-mode)))
+#+END_SRC
+
+**** hindent
+#+BEGIN_SRC emacs-lisp
+  (use-package hindent
+    :ensure t
+    :config
+    (setq hindent-reformat-buffer-on-save t))
 #+END_SRC
 
 *** Bash
