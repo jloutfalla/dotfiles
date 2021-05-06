@@ -1,6 +1,6 @@
-Emacs/.emacs.d/*
-!Emacs/.emacs.d/config.org
-!Emacs/.emacs.d/README.org
+Emacs/.config/emacs/*
+!Emacs/.config/emacs/config.org
+!Emacs/.config/emacs/README.org
 
 Zsh/.config/zsh/*
 !Zsh/.config/zsh/.zshrc
