@@ -12,11 +12,14 @@ xss-lock -- i3lock -i "$HOME/Pictures/Wallpaper/wallpaper_hina.png" &
 
 # Trackpad : taping enable and mouse speed
 TOUCHPAD_DEV=$(xinput list | awk -F '\t' '/Touchpad/ {print $2}' | tr -cd '[:digit:]')
-TAPPING=$(xinput list-props "$TOUCHPAD_DEV" | sed -n '/Tapping/{2,~0s/:.*$//p}' | tr -cd '[:digit:]')
-ACCEL_SPEED=$(xinput list-props "$TOUCHPAD_DEV" | sed -n '/Accel Speed/{1,~0s/:.*$//p}' | tr -cd '[:digit:]')
+if [ -n "$TOUCHPAD_DEV" ]
+then
+    TAPPING=$(xinput list-props "$TOUCHPAD_DEV" | sed -n '/Tapping/{2,~0s/:.*$//p}' | tr -cd '[:digit:]')
+    ACCEL_SPEED=$(xinput list-props "$TOUCHPAD_DEV" | sed -n '/Accel Speed/{1,~0s/:.*$//p}' | tr -cd '[:digit:]')
 
-xinput set-prop "$TOUCHPAD_DEV" "$TAPPING" 1
-xinput set-prop "$TOUCHPAD_DEV" "$ACCEL_SPEED" 0.55
+    xinput set-prop "$TOUCHPAD_DEV" "$TAPPING" 1
+    xinput set-prop "$TOUCHPAD_DEV" "$ACCEL_SPEED" 0.55
+fi
 
 dwmstatus >/dev/null 2>&1 &
 
