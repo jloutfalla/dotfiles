@@ -1,6 +1,10 @@
 #!/bin/sh
 
+NOTIFICATION_SERVER="/usr/lib/xfce4/notifyd/xfce4-notifyd"
+
 setbg &
+
+eval "$NOTIFICATION_SERVER &"
 
 udiskie -s &
 picom --no-fading-openclose &
