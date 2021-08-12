@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# An utility to toggle mute.
+
+# amixer set Master toggle
+pactl set-sink-mute @DEFAULT_SINK@ toggle
+

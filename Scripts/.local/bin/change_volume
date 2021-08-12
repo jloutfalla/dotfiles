@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# An utility to allow changing the volume.
+
+if [ -n "$1" ]
+then
+    # amixer set Master "$1"
+    pactl set-sink-volume @DEFAULT_SINK@ "$1"
+fi
+
