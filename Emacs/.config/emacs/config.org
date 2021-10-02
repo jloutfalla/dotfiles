@@ -228,34 +228,32 @@ It can be really useful when you don't remember a long keybinding.
 #+END_SRC
 
 * Minor conveniences
-** Search improvement
-*** Ivy
+** Minibuffer completion
+*** ido
 #+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :ensure t
-    :diminish
-    :init
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d%d) ")
-    :bind ("C-x b" . 'ivy-switch-buffer)
-    :config
-    (ivy-mode 1))
+  (setq ido-enable-flex-matching t)
+  (setq ido-create-new-buffer 'always)
+  (setq ido-everywhere t)
+  (ido-mode 1)
 #+END_SRC
 
-*** Counsel
+*** ibuffer
 #+BEGIN_SRC emacs-lisp
-  (use-package counsel
-    :ensure t
-    :diminish
-    :config
-    (counsel-mode 1))
+  (setq ibuffer-use-other-window t)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+END_SRC
 
-*** Swiper
+*** icircle
 #+BEGIN_SRC emacs-lisp
-  (use-package swiper
+  (icomplete-mode 1)
+#+END_SRC
+
+*** smex
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
     :ensure t
-    :bind ("C-s" . 'swiper))
+    :init (smex-initialize)
+    :bind ("M-x" . smex))
 #+END_SRC
 
 ** French spelling/grammar checker - Grammalecte
@@ -353,6 +351,16 @@ Enables relative line numbers for programming-related modes.
 Makes Emacs considers camelCase strings as multiple words.
 #+BEGIN_SRC emacs-lisp
   (global-subword-mode 1)
+#+END_SRC
+
+** Multiple cursors
+#+BEGIN_SRC emacs-lisp
+  (use-package multiple-cursors
+    :ensure t
+    :bind (("C-S-c C-S-c" . mc/edit-lines)
+           ("C->" . mc/mark-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
 
 ** Replace the selected region
@@ -480,6 +488,7 @@ Insert the short text of the GPLv3 at the beginning of the file.
   "/* %s
 
      Copyright (C) %s %s <%s>
+
      This program is free software: you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation, either version 3 of the License, or
