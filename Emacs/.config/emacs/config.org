@@ -434,7 +434,7 @@ the binding of the =comment-set-column= in this case.
     :bind-keymap ("C-c p" . projectile-command-map)
     :bind ("<f7>" . 'projectile-compile-project)
     :init
-    (setq projectile-completion-system 'ivy)
+    (setq projectile-completion-system 'ido)
     :config
     (projectile-mode 1))
 #+END_SRC
