@@ -361,6 +361,7 @@ Makes Emacs considers camelCase strings as multiple words.
            ("C->" . mc/mark-next-like-this)
            ("C-<" . mc/mark-previous-like-this)
            ("C-c C-<" . mc/mark-all-like-this)))
+  (setq mc/always-run-for-all t)
 #+END_SRC
 
 ** Replace the selected region
