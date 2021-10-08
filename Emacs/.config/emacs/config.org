@@ -151,6 +151,15 @@ to a non-nil value.
   (setq frame-resize-pixelwise t)
 #+END_SRC
 
+*** ANSI colors
+In certain modes like =compilation-mode=, ANSI escape sequences does
+not work properly.
+#+BEGIN_SRC emacs-lisp
+  (defun colorize-with-ansi-sequences-buffer ()
+    (ansi-color-apply-on-region compilation-filter-start (point)))
+  (add-hook 'compilation-filter-hook 'colorize-with-ansi-sequences-buffer)
+#+END_SRC
+
 ** Functionality
 *** Do not create backup files
 #+BEGIN_SRC emacs-lisp
