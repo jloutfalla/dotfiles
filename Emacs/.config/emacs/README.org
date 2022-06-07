@@ -1,6 +1,8 @@
 #+TITLE: Emacs configuration
 #+AUTHOR: Jean-Baptiste Loutfalla
-#+STARTUP: overview
+#+PROPERTY: header-args :tangle config.el
+#+auto_tangle: t
+#+STARTUP: showeverything
 #+LANGUAGE: en
 #+OPTIONS: toc:nil num:nil
 
@@ -18,18 +20,19 @@ other people as [[https://github.com/munen/emacs.d][Alain M. Lafon]] or [[https:
 ** Programming
 *** From package manager
 - =clang=, for C/C++ completion and =rtags=.
+- [[https://gnu.org/software/global/][=global=]], for completion using =ggtags=.
 - =sbcl=, for CLisp completion and REPL.
 - =racer= and =rustfmt=, for Rust completion and format.
 - =python-epc=, for use =python-jedi=.
 - =python-jedi=, for Python completion.
 - =ghci=, for Haskell inferior processus.
-- =stylish-haskell=, for Haskell autoformating.
+- =stylish-haskell=, for Haskell auto-formatting.
 
 ** Exporting
 *** From the package manager
 + =texlive= (or any other LaTeX distribution), for exportations using LaTeX.
 + =pygmentize=, for code highlighting when export to PDF.
-
+ 
 * Some notes
 ** On use-package some more
 I utilize =use-package= to handle downloading and configuring other packages painlessly.
@@ -53,12 +56,6 @@ be called =init.org=.
 #+END_SRC
 
 * Needs at startup
-** Garbage collection
-Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
-#+BEGIN_SRC emacs-lisp
-  (setq gc-cons-threshold 20000000)
-#+END_SRC
-
 ** Activate the MELPA depot
 #+BEGIN_SRC emacs-lisp
   (require 'package)
@@ -80,9 +77,8 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-package-update
     :ensure t
-    :init
-    (setq auto-package-update-delete-old-versions t)
     :config
+    (setq auto-package-update-delete-old-versions t)
     (auto-package-update-maybe))
 #+END_SRC
 
@@ -90,20 +86,20 @@ Allow 20MB of memory instead of 0.76MB before calling the garbage collector.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-compile
     :ensure t
-    :init
-    (setq load-prefer-newer t)
     :config
+    (setq load-prefer-newer t)
     (auto-compile-on-load-mode))
 #+END_SRC
 
 * Theme
-** Base16 Tomorrow Night theme
-I use the Base16 Tomorrow Night theme because it doesn't mess up when Emacs is in the terminal.
+** Color Theme Sanityinc Tomorrow
+A nice dark theme.
 #+BEGIN_SRC emacs-lisp
-  (use-package base16-theme
+  (use-package color-theme-sanityinc-tomorrow
+    :defer t
     :ensure t
     :config
-    (load-theme 'base16-tomorrow-night t))
+    (color-theme-sanityinc-tomorrow-night))
 #+END_SRC
 
 * Basic Interface Settings
@@ -131,8 +127,14 @@ There are some setting that do not depend on packages and are built-in enhanceme
 #+END_SRC
 
 *** Highlight current line
+Uncomment this if you want to highlight the current line when
+opening/changing frame.
 #+BEGIN_SRC emacs-lisp
-  (when (display-graphic-p) (global-hl-line-mode t))
+  ;; (add-hook 'after-make-frame-functions
+  ;;           (lambda (frame)
+  ;;             (select-frame frame)
+  ;;             (when (display-graphic-p frame)
+  ;;               (global-hl-line-mode 1))))
 #+END_SRC
 
 *** Cursor position
@@ -286,10 +288,11 @@ After installing it, you need to run =flycheck-grammalecte-download-grammalecte=
 Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
 #+BEGIN_SRC emacs-lisp
   (defun edit-config ()
-    "Edit/Open $XDG_CONFIG_HOME/emacs/config.org"
+    "Edit/Open the config org file (`$XDG_CONFIG_HOME/emacs/README.org')"
     (interactive)
     (setq-local config-file
-                (concat (getenv "XDG_CONFIG_HOME") "/emacs/config.org"))
+                (expand-file-name (concat (getenv "XDG_CONFIG_HOME")
+                                          "/emacs/README.org")))
     (when (file-readable-p config-file)
       (find-file config-file)))
 
@@ -300,12 +303,13 @@ Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
 Simply pressing =C-c r= will reload this file. You can also invoke =config-reload=.
 #+BEGIN_SRC emacs-lisp
   (defun config-reload ()
-    "Reloads $XDG_CONFIG_HOME/emacs/config.org at runtime"
+    "Reloads the emacs-lisp config file (`$XDG_CONFIG_HOME/emacs/config.el')"
     (interactive)
     (setq-local config-file
-                (concat (getenv "XDG_CONFIG_HOME") "/emacs/config.org"))
+                (expand-file-name (concat (getenv "XDG_CONFIG_HOME")
+                                          "/emacs/config.el")))
     (when (file-readable-p config-file)
-      (org-babel-load-file (expand-file-name config-file))))
+      (load config-file)))
 
   (global-set-key (kbd "C-c r") 'config-reload)
 #+END_SRC
@@ -388,11 +392,6 @@ Expends region from the cursor to the word, sentence, ...
 #+END_SRC
 
 ** Tabs indentation and completion
-Replace tabs by spaces.
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
-
 Enables tab completions.
 #+BEGIN_SRC emacs-lisp
   (setq tab-always-indent t)
@@ -404,15 +403,6 @@ Enables tab completions.
   (use-package popup-kill-ring
     :ensure t
     :bind ("M-y" . popup-kill-ring))
-#+END_SRC
-
-** =beacon=
-#+BEGIN_SRC emacs-lisp
-  (use-package beacon
-    :ensure t
-    :diminish
-    :config
-    (beacon-mode 1))
 #+END_SRC
 
 ** Hide some mode from the modeline
@@ -445,16 +435,22 @@ the binding of the =comment-set-column= in this case.
     :init
     (setq projectile-completion-system 'ido)
     :config
+    ;; Directories to ignore
+    (add-to-list 'projectile-globally-ignored-directories "build")
+
+    ;; File suffixes to ignore
+    (add-to-list 'projectile-globally-ignored-file-suffixes ".o")
+    (add-to-list 'projectile-globally-ignored-file-suffixes ".d")
     (projectile-mode 1))
 #+END_SRC
 
 *** Generate =.dir-locals.el= for =cmake-ide=
 #+BEGIN_SRC emacs-lisp
   (defun cmake-dir-locals ()
-    "Create a .dir-locals.el file at the root of the project which set cmake-ide-build-dir to PROJECT_ROOT/build/"
+    "Create a .dir-locals.el file at the root of the project which set cmake-ide-build-dir to `PROJECT_ROOT/build'"
     (interactive)
     (let ((s "((nil .
-    ((eval . (setq cmake-ide-build-dir
+    ((eval . (setq-local cmake-ide-build-dir
                 (concat (projectile-project-root)
                         \"build/\"))))))\n")
           (project-dir (projectile-project-root)))
@@ -525,6 +521,7 @@ Insert the short text of the GPLv3 at the beginning of the file.
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
+    :defer t
     :ensure t
     :after (yasnippet-snippets)
     :diminish yas-minor-mode
@@ -532,7 +529,7 @@ Insert the short text of the GPLv3 at the beginning of the file.
     (yas-global-mode))
 
   (use-package yasnippet-snippets
-      :ensure t)
+    :ensure t)
 #+END_SRC
 
 ** flycheck
@@ -559,24 +556,24 @@ I prefer =C-n= and =C-p= to navigate around the items.
            ("C-n" . 'company-select-next)
            ("C-p" . 'company-select-previous)
            ("SCP" . 'company-abort))
-    :init
+    :config
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 2)
-    (setq company-backends '())
-    (add-to-list 'company-backends 'company-files)
-    (add-to-list 'company-backends 'company-cmake)
-    (add-to-list 'company-backends 'company-c-headers)
-    (add-to-list 'company-backends 'company-rtags)
-    (add-to-list 'company-backends 'company-dabbrev)
-    (add-to-list 'company-backends 'company-dabbrev-code)
-    (add-to-list 'company-backends 'company-irony)
-    (add-to-list 'company-backends 'company-racer)
-    (add-to-list 'company-backends 'company-shell)
-    (add-to-list 'company-backends 'company-shell-env)
-    (add-to-list 'company-backends 'company-etags)
-    (add-to-list 'company-backends 'company-capf)
-    (add-to-list 'company-backends 'company-jedi)
-    :config
+    (setq company-backends '(company-cmake
+                             company-c-headers
+                             company-files
+                             (company-clang :with company-yasnippet :separate)
+                             (company-gtags company-rtags company-etags
+                                            :with company-yasnippet :separate)
+                             company-irony
+                             (company-racer :with company-yasnippet :separate)
+                             (company-shell company-shell-env
+                                            :with company-yasnippet :separate)
+                             (company-jedi :with company-yasnippet :separate)
+                             (company-keywords :with company-dabbrev-code
+                                               :with company-yasnippet :separate)
+                             company-capf
+                             company-dabbrev))
     (global-company-mode 1))
 
   (use-package company-quickhelp
@@ -588,8 +585,12 @@ I prefer =C-n= and =C-p= to navigate around the items.
 ** Programming style
 *** Style
 #+BEGIN_SRC emacs-lisp
-  (setq-default c-default-style "gnu"
-                c-basic-offset 2)
+  ;; (setq-default c-default-style "gnu"
+  ;;               c-basic-offset 2)
+  (use-package format-all
+    :ensure t
+    :hook ((prog-mode . format-all-mode)
+           (format-all-mode . format-all-ensure-formatter)))
 #+END_SRC
 
 *** Automatic detection of the indentation style
@@ -602,16 +603,20 @@ I prefer =C-n= and =C-p= to navigate around the items.
 
 *** Display an indicator for the fill column
 #+BEGIN_SRC emacs-lisp
-  (use-package fill-column-indicator
-    :ensure t
-    :config
-    (setq fci-rule-column 80)
-    (setq fci-color "dim gray")
-    (add-hook 'prog-mode-hook #'fci-mode))
+  (setq-default display-fill-column-indicator-column 80)
+  (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  (global-visual-line-mode)
 #+END_SRC
 
 ** Specific languages
 *** C/C++
+**** gdb
+Display almost all debugging windows when gdb is called with =-i=mi=
+option.
+#+BEGIN_SRC emacs-lisp
+  (setq gdb-many-windows t)
+#+END_SRC
+
 **** cmake-mode
 #+BEGIN_SRC emacs-lisp
   (use-package cmake-mode
@@ -634,11 +639,39 @@ After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
       :ensure t)
 #+END_SRC
 
+**** ggtags
+Alternatively to =rtags=, you can use =ggtags= with a tagging system
+like [[https://gnu.org/software/global/][=global=]] or [[https://ctags.io][=ctags=]].
+#+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+    :ensure t
+    :hook ((c-mode c++-mode java-mode asm-mode) . ggtags-mode)
+    :bind (:map ggtags-mode-map
+                ("C-c g s" . ggtags-find-other-symbol)
+                ("C-c g h" . ggtags-view-tag-history)
+                ("C-c g r" . ggtags-find-reference)
+                ("C-c g d" . ggtags-find-definition)
+                ("C-c g f" . ggtags-find-file)
+                ("C-c g c" . ggtags-create-tags)
+                ("C-c g u" . ggtags-update-tags)
+                ("C-c g g" . ggtags-grep)
+                ("C-c g C-s" . ggtags-find-tag-regexp)
+                ("C-c g M-%" . ggtags-query-replace)
+                ("M-," . pop-tag-mark)))
+#+END_SRC
+
 **** company
 Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (use-package company-c-headers
-    :ensure t)
+    :ensure t
+    :config
+    (setq company-c-headers-path-system
+          (append (file-expand-wildcards "/usr/include/c++/*")
+                  company-c-headers-path-system))
+    (setq company-c-headers-path-system
+          (append (file-expand-wildcards "/usr/lib/gcc/x86_64-pc-linux-gnu/*/include")
+                  company-c-headers-path-system)))
 
   (use-package company-rtags
     :ensure t
@@ -650,7 +683,7 @@ Requires libclang to be installed.
 
   (use-package irony
     :ensure t
-    :hook (((c-mode c++-mode) . irony-mode)
+    :hook ((cide--mode . irony-mode)
            (irony-mode . irony-cdb-autosetup-compile-options)))
 #+END_SRC
 
@@ -659,7 +692,7 @@ Requires libclang to be installed.
   (use-package cmake-ide
     :ensure t)
 
-  (cmake-ide-setup)
+  ;; (cmake-ide-setup)
 #+END_SRC
 
 **** GLSL
@@ -731,14 +764,15 @@ Requires libclang to be installed.
 #+BEGIN_SRC emacs-lisp
   (use-package slime
     :ensure t
-    :config
-    (setq inferior-lisp-program "/usr/bin/sbcl")
-    (setq slime-contribs '(slime-fancy)))
+    :defer t
+    :init
+    (setq inferior-lisp-program "sbcl")
+    (setq slime-contribs '(slime-fancy slime-company)))
 
   (use-package slime-company
     :ensure t
-    :init
-    (slime-setup '(slime-fancy slime-company)))
+    :config
+    (slime-setup))
 #+END_SRC
 
 *** Scheme
@@ -759,8 +793,8 @@ Use GNU Guile as the interpreter.
                 ("C-c C-t" . haskell-process-do-type)
                 ("C-c C-i" . haskell-process-do-info)
                 ("C-c c" . haskell-process-cabal))
-    :hook ((haskell-mode . interactive-haskell-mode)
-           (haskell-mode . hindent-mode)))
+    :hook ((haskell-mode . interactive-haskell-mode)))
+           ;; (haskell-mode . hindent-mode)))
 #+END_SRC
 
 **** hindent
@@ -787,6 +821,15 @@ Use GNU Guile as the interpreter.
 #+END_SRC
 
 * Org
+** Auto tangling
+#+BEGIN_SRC emacs-lisp
+  (use-package org-auto-tangle
+    :ensure t
+    :hook (org-mode . org-auto-tangle-mode)
+    :config
+    (setq org-auto-tangle-default t))
+#+END_SRC
+
 ** Completion
 #+BEGIN_SRC emacs-lisp
   (defun add-pcomplete-to-capf ()
@@ -794,7 +837,6 @@ Use GNU Guile as the interpreter.
 
   (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
 #+END_SRC
-
 ** Common settings
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-c l") 'org-store-link)

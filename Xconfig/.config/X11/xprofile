@@ -7,7 +7,7 @@ setbg &
 eval "$NOTIFICATION_SERVER &"
 
 udiskie -s &
-picom --no-fading-openclose &
+picom &
 nm-applet &
 redshift-gtk -l 45.750000:4.850000 &
 fcitx &

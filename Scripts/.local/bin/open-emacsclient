@@ -1,12 +1,22 @@
 #!/bin/sh
 
+OPTS="-c"
 FRAME=$(emacsclient -e "(member \"$DISPLAY\" (mapcar 'terminal-name (frames-on-display-list)))" 2> /dev/null)
-[ "$FRAME" = "nil" ] && OPTS="-c"
+[ -n "$FRAME" ] && [ "$FRAME" != "nil" ] && OPTS=""
 
-if [ -n "$OPTS" ]
+if [ -z "$FRAME" ]
 then
-    emacsclient -n -a emacs "$OPTS" "$@"
-else
-    emacsclient -n -a emacs "$@"
+    while [ "$#" -gt 0 ]
+    do
+        shift
+    done
 fi
 
+if [ -n "$OPTS" ] # The $OPTS variable will act as the first real argument
+then              # of emacsclient so it will not open the file in this case              
+    emacsclient -n -a emacs $OPTS "$@" 2> /dev/null &
+else
+    emacsclient -n -a emacs "$@" 2> /dev/null &
+fi
+
+[ -z "$FRAME" ] && sleep 4 && emacs --daemon 2> /dev/null &
