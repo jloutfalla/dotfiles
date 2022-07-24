@@ -68,15 +68,19 @@ be called =init.org=.
 
 ** Boostrapping =use-package=
 #+BEGIN_SRC emacs-lisp
+  (unless package-archive-contents
+    (package-refresh-contents))
+
   (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
     (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 #+END_SRC
 
 ** Automatic update packages
 #+BEGIN_SRC emacs-lisp
   (use-package auto-package-update
-    :ensure t
     :config
     (setq auto-package-update-delete-old-versions t)
     (auto-package-update-maybe))
@@ -85,7 +89,6 @@ be called =init.org=.
 ** Always compile packages and use the newest version compiled
 #+BEGIN_SRC emacs-lisp
   (use-package auto-compile
-    :ensure t
     :config
     (setq load-prefer-newer t)
     (auto-compile-on-load-mode))
@@ -97,7 +100,6 @@ A nice dark theme.
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme-sanityinc-tomorrow
     :defer t
-    :ensure t
     :config
     (color-theme-sanityinc-tomorrow-night))
 #+END_SRC
@@ -156,9 +158,9 @@ to a non-nil value.
 In certain modes like =compilation-mode=, ANSI escape sequences does
 not work properly.
 #+BEGIN_SRC emacs-lisp
-  (defun colorize-with-ansi-sequences-buffer ()
+  (defun jl/colorize-with-ansi-sequences-buffer ()
     (ansi-color-apply-on-region compilation-filter-start (point)))
-  (add-hook 'compilation-filter-hook 'colorize-with-ansi-sequences-buffer)
+  (add-hook 'compilation-filter-hook 'jl/colorize-with-ansi-sequences-buffer)
 #+END_SRC
 
 ** Functionality
@@ -194,7 +196,6 @@ not work properly.
 Use of asynchronous processes wherever it's possible.
 #+BEGIN_SRC emacs-lisp
   (use-package async
-    :ensure t
     :init
     (dired-async-mode 1))
 #+END_SRC
@@ -203,7 +204,6 @@ Use of asynchronous processes wherever it's possible.
 Allow Emacs to be use for pinentry of GnuPG
 #+BEGIN_SRC emacs-lisp
   (use-package pinentry
-    :ensure t
     :config
     (setq epa-pinentry-mode 'loopback)
     (pinentry-start))
@@ -213,9 +213,9 @@ Allow Emacs to be use for pinentry of GnuPG
 ** Setting default Shell
 For conveniences I prefer to set the Shell with a variable.
 #+BEGIN_SRC emacs-lisp
-  (defvar my-terminal-shell "/bin/bash")
+  (defvar jl/my-terminal-shell "/bin/bash")
   (defadvice ansi-term (before force-bash)
-    (interactive (list my-terminal-shell)))
+    (interactive (list jl/my-terminal-shell)))
   (ad-activate 'ansi-term)
 #+END_SRC
 
@@ -232,7 +232,6 @@ This package will show you all keybindings possible when you start one.
 It can be really useful when you don't remember a long keybinding.
 #+BEGIN_SRC emacs-lisp
   (use-package which-key
-    :ensure t
     :diminish
     :config
     (which-key-mode))
@@ -262,7 +261,6 @@ It can be really useful when you don't remember a long keybinding.
 *** smex
 #+BEGIN_SRC emacs-lisp
   (use-package smex
-    :ensure t
     :init (smex-initialize)
     :bind ("M-x" . smex))
 #+END_SRC
@@ -280,38 +278,31 @@ After installing it, you need to run =flycheck-grammalecte-download-grammalecte=
   (setq flycheck-grammalecte-report-apos nil)
   (setq flycheck-grammalecte-report-nbsp nil)
 
-  (use-package flycheck-grammalecte
-    :ensure t)
+  (use-package flycheck-grammalecte)
 #+END_SRC
 
 ** Edit/Open the configuration
-Simply pressing =C-c e= will open this file. You can also invoke =edit-config=.
+Simply pressing =C-c e= will open this file. You can also invoke =jl/edit-config=.
 #+BEGIN_SRC emacs-lisp
-  (defun edit-config ()
+  (defun jl/edit-config ()
     "Edit/Open the config org file (`$XDG_CONFIG_HOME/emacs/README.org')"
     (interactive)
-    (setq-local config-file
-                (expand-file-name (concat (getenv "XDG_CONFIG_HOME")
-                                          "/emacs/README.org")))
-    (when (file-readable-p config-file)
-      (find-file config-file)))
+    (when (file-readable-p jl/config-file-org)
+      (find-file jl/config-file-org)))
 
-  (global-set-key (kbd "C-c e") 'edit-config)
+  (global-set-key (kbd "C-c e") 'jl/edit-config)
 #+END_SRC
 
 ** Reloading the configuration
-Simply pressing =C-c r= will reload this file. You can also invoke =config-reload=.
+Simply pressing =C-c r= will reload this file. You can also invoke =jl/config-reload=.
 #+BEGIN_SRC emacs-lisp
-  (defun config-reload ()
+  (defun jl/config-reload ()
     "Reloads the emacs-lisp config file (`$XDG_CONFIG_HOME/emacs/config.el')"
     (interactive)
-    (setq-local config-file
-                (expand-file-name (concat (getenv "XDG_CONFIG_HOME")
-                                          "/emacs/config.el")))
-    (when (file-readable-p config-file)
-      (load config-file)))
+    (when (file-readable-p jl/config-file)
+      (load jl/config-file)))
 
-  (global-set-key (kbd "C-c r") 'config-reload)
+  (global-set-key (kbd "C-c r") 'jl/config-reload)
 #+END_SRC
 
 ** Electric
@@ -329,7 +320,6 @@ Enable automatic closing brackets, parentheses, quotation marks, ...
 Highlights hexadecimal codes that resembles a color in the appropriate color.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-mode
-    :ensure t
     :hook (prog-mode)
     :diminish rainbow-mode)
 #+END_SRC
@@ -338,7 +328,6 @@ Highlights hexadecimal codes that resembles a color in the appropriate color.
 Color parentheses and other delimiters depending of their depth.
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-    :ensure t
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 
@@ -352,7 +341,6 @@ Highlights matching parens when the cursor is just behind one of them
 Enables relative line numbers for programming-related modes.
 #+BEGIN_SRC emacs-lisp
   (use-package linum-relative
-    :ensure t
     :hook (prog-mode . linum-relative-mode)
     :diminish
     :config
@@ -369,7 +357,6 @@ Makes Emacs considers camelCase strings as multiple words.
 ** Multiple cursors
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
-    :ensure t
     :bind (("C-!" . mc/edit-lines)
            ("C->" . mc/mark-next-like-this)
            ("C-<" . mc/mark-previous-like-this)
@@ -387,7 +374,6 @@ Enables replacing directly a selected region by what you type.
 Expends region from the cursor to the word, sentence, ...
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
-    :ensure t
     :bind ("C-q" . er/expand-region))
 #+END_SRC
 
@@ -401,14 +387,12 @@ Enables tab completions.
 ** Popup kill-ring
 #+BEGIN_SRC emacs-lisp
   (use-package popup-kill-ring
-    :ensure t
     :bind ("M-y" . popup-kill-ring))
 #+END_SRC
 
 ** Hide some mode from the modeline
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
-    :ensure t
     :config
     (diminish 'linum-relative-mode)
     (diminish 'subword-mode)
@@ -429,7 +413,6 @@ the binding of the =comment-set-column= in this case.
 ** Projectile
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
-    :ensure t
     :bind-keymap ("C-c p" . projectile-command-map)
     :bind ("<f7>" . 'projectile-compile-project)
     :init
@@ -437,6 +420,7 @@ the binding of the =comment-set-column= in this case.
     :config
     ;; Directories to ignore
     (add-to-list 'projectile-globally-ignored-directories "build")
+    (add-to-list 'projectile-globally-ignored-directories ".cache")
 
     ;; File suffixes to ignore
     (add-to-list 'projectile-globally-ignored-file-suffixes ".o")
@@ -461,7 +445,7 @@ the binding of the =comment-set-column= in this case.
 
 ** Dashboard
 #+BEGIN_SRC emacs-lisp
-  (defun start-dashboard ()
+  (defun jl/start-dashboard ()
     "Starts dashboard
   This definition is to be used with `emacs --daemon'"
     (dashboard-setup-startup-hook)
@@ -470,20 +454,19 @@ the binding of the =comment-set-column= in this case.
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
 
   (use-package dashboard
-    :ensure t
     :after projectile
     :config
     (setq dashboard-startup-banner
           (concat (getenv "XDG_CONFIG_HOME") "/emacs/img/dashLogo.png")))
 
-  (start-dashboard)
+  (jl/start-dashboard)
 #+END_SRC
 
 * Programming
 ** GPLv3
 Insert the short text of the GPLv3 at the beginning of the file.
 #+BEGIN_SRC emacs-lisp
-  (defun insert-gpl (description)
+  (defun jl/insert-gpl (description)
     "Insert the brief of the GNU GPLv3."
     (interactive "sShort description: ")
     (setq-local current-year (format-time-string "%Y"))
@@ -512,74 +495,89 @@ Insert the short text of the GPLv3 at the beginning of the file.
 #+END_SRC
 
 ** magit
+A pretty great git integration.
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure t
     :bind ("C-x g" . magit-status))
 #+END_SRC
 
 ** yasnippet
 #+BEGIN_SRC emacs-lisp
+  (use-package yasnippet-snippets)
+
   (use-package yasnippet
     :defer t
-    :ensure t
     :after (yasnippet-snippets)
     :diminish yas-minor-mode
     :config
     (yas-global-mode))
-
-  (use-package yasnippet-snippets
-    :ensure t)
 #+END_SRC
 
-** flycheck
+** lsp-mode
+To allow great completions and others nice features when editing
+source code, =lsp-mode= is good to have. It allows Emacs to talk to
+various language servers like =clangd= for C/C++ or =rust-analyzer=
+for Rust.
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t
-    :after (rust-mode)
-    :hook ((c-mode c++-mode shell-mode python-mode) . flycheck-mode)
-    :diminish)
+    (use-package lsp-mode
+      :init
+      (setq lsp-keymap-prefix "C-c l")
+      :hook ((c-mode c++-mode cmake-mode) . lsp-deferred)
+      :commands (lsp lsp-deferred)
+      :config
+      (require 'lsp-ido)
+      (lsp-enable-which-key-integration t))
 #+END_SRC
 
-** company mode
-The delay for company mode to kick in immediatly and starts completion after 2 characters.
-
+** company-mode
 I prefer =C-n= and =C-p= to navigate around the items.
 #+BEGIN_SRC emacs-lisp
+  ;; https://itecnote.com/tecnote/about-the-fix-for-the-interference-between-company-mode-and-yasnippet/
+  (defun jl/company-yasnippet-or-completion ()
+    "Try to expand a snippet at point or complete with company"
+    (interactive)
+    (let ((yas-fallback-behavior nil))
+      (unless (yas-expand)
+        (call-interactively #'company-complete-common))))
+
+  (defun jl/company-complete-common ()
+    "Replacement of `company-complete-common' with `jl/company-yasnippet-or-competion'"
+    (interactive)
+    (substitute-key-definition 'company-complete-common
+                               'jl/company-yasnippet-or-completion
+                               company-active-map))
+
   (use-package company
     :ensure t
-    :hook ((emacs-lisp-mode shell-mode python-mode) . company-mode)
+    :hook ((emacs-lisp-mode . (lambda ()
+                                (setq-local company-backend 'company-elisp)))
+           (sh-mode . (lambda ()
+                        (setq-local company-backend 'company-shell)))
+           ((emacs-lisp-mode sh-mode python-mode) . company-mode)
+           (cmake-mode . company-mode)
+           (company-mode . jl/company-complete-common))
     :bind (("M-<tab>" . 'company-complete)
            :map company-active-map
            ("M-n" . nil)
            ("M-p" . nil)
            ("C-n" . 'company-select-next)
-           ("C-p" . 'company-select-previous)
-           ("SCP" . 'company-abort))
+           ("C-p" . 'company-select-previous))
     :config
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 2)
-    (setq company-backends '(company-cmake
-                             company-c-headers
-                             company-files
-                             (company-clang :with company-yasnippet :separate)
-                             (company-gtags company-rtags company-etags
-                                            :with company-yasnippet :separate)
-                             company-irony
-                             (company-racer :with company-yasnippet :separate)
-                             (company-shell company-shell-env
-                                            :with company-yasnippet :separate)
-                             (company-jedi :with company-yasnippet :separate)
-                             (company-keywords :with company-dabbrev-code
-                                               :with company-yasnippet :separate)
-                             company-capf
-                             company-dabbrev))
-    (global-company-mode 1))
+    (setq company-idle-delay 0.1
+          company-minimum-prefix-length 1)
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common))
 
   (use-package company-quickhelp
-    :ensure t
     :config
     (company-quickhelp-mode))
+#+END_SRC
+
+** flycheck
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck
+    :after (rust-mode)
+    :hook ((shell-mode python-mode) . flycheck-mode)
+    :diminish)
 #+END_SRC
 
 ** Programming style
@@ -588,7 +586,6 @@ I prefer =C-n= and =C-p= to navigate around the items.
   ;; (setq-default c-default-style "gnu"
   ;;               c-basic-offset 2)
   (use-package format-all
-    :ensure t
     :hook ((prog-mode . format-all-mode)
            (format-all-mode . format-all-ensure-formatter)))
 #+END_SRC
@@ -596,7 +593,6 @@ I prefer =C-n= and =C-p= to navigate around the items.
 *** Automatic detection of the indentation style
 #+BEGIN_SRC emacs-lisp
   (use-package dtrt-indent
-    :ensure t
     :config
     (dtrt-indent-global-mode 1))
 #+END_SRC
@@ -619,24 +615,7 @@ option.
 
 **** cmake-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package cmake-mode
-    :ensure t)
-#+END_SRC
-
-**** flycheck
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck-clang-analyzer
-    :ensure t
-    :after (flycheck)
-    :config
-    (flycheck-clang-analyzer-setup))
-#+END_SRC
-
-**** rtags
-After downloading, don't forget to call =M-x rtags-install RET rtags RET=.
-#+BEGIN_SRC emacs-lisp
-  (use-package rtags
-      :ensure t)
+  (use-package cmake-mode)
 #+END_SRC
 
 **** ggtags
@@ -644,8 +623,7 @@ Alternatively to =rtags=, you can use =ggtags= with a tagging system
 like [[https://gnu.org/software/global/][=global=]] or [[https://ctags.io][=ctags=]].
 #+BEGIN_SRC emacs-lisp
   (use-package ggtags
-    :ensure t
-    :hook ((c-mode c++-mode java-mode asm-mode) . ggtags-mode)
+    ;; :hook ((c-mode c++-mode java-mode asm-mode) . ggtags-mode)
     :bind (:map ggtags-mode-map
                 ("C-c g s" . ggtags-find-other-symbol)
                 ("C-c g h" . ggtags-view-tag-history)
@@ -660,41 +638,6 @@ like [[https://gnu.org/software/global/][=global=]] or [[https://ctags.io][=ctag
                 ("M-," . pop-tag-mark)))
 #+END_SRC
 
-**** company
-Requires libclang to be installed.
-#+BEGIN_SRC emacs-lisp
-  (use-package company-c-headers
-    :ensure t
-    :config
-    (setq company-c-headers-path-system
-          (append (file-expand-wildcards "/usr/include/c++/*")
-                  company-c-headers-path-system))
-    (setq company-c-headers-path-system
-          (append (file-expand-wildcards "/usr/lib/gcc/x86_64-pc-linux-gnu/*/include")
-                  company-c-headers-path-system)))
-
-  (use-package company-rtags
-    :ensure t
-    :config
-    (setq rtags-completions-enabled t))
-
-  (use-package company-irony
-    :ensure t)
-
-  (use-package irony
-    :ensure t
-    :hook ((cide--mode . irony-mode)
-           (irony-mode . irony-cdb-autosetup-compile-options)))
-#+END_SRC
-
-**** cmake-ide
-#+BEGIN_SRC emacs-lisp
-  (use-package cmake-ide
-    :ensure t)
-
-  ;; (cmake-ide-setup)
-#+END_SRC
-
 **** GLSL
 #+BEGIN_SRC emacs-lisp
   (use-package glsl-mode
@@ -705,7 +648,6 @@ Requires libclang to be installed.
 **** rust-mode
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
-    :ensure t
     :bind (:map rust-mode-map
            ("<tab>" . #'company-indent-or-complete-common))
     :hook ((rust-mode) . (lambda () (setq indent-tabs-mode nil)))
@@ -725,7 +667,6 @@ Requires libclang to be installed.
 **** flycheck
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
-    :ensure t
     :after (flycheck rust-mode)
     :hook (((flycheck-mode) . flycheck-rust-setup)
            ((rust-mode) . flycheck-mode)))
@@ -734,7 +675,6 @@ Requires libclang to be installed.
 **** cargo
 #+BEGIN_SRC emacs-lisp
   (use-package cargo
-    :ensure t
     :after (rust-mode)
     :hook (rust-mode . cargo-minor-mode))
 #+END_SRC
@@ -742,7 +682,6 @@ Requires libclang to be installed.
 **** racer
 #+BEGIN_SRC emacs-lisp
   (use-package racer
-    :ensure t
     :hook ((rust-mode . racer-mode)
            (racer-mode . eldoc-mode)
            (racer-mode . company-mode)))
@@ -750,29 +689,13 @@ Requires libclang to be installed.
 
 **** company
 #+BEGIN_SRC emacs-lisp
-  (use-package company-racer
-    :ensure t)
+  (use-package company-racer)
 #+END_SRC
 
 *** Emacs Lisp
 **** eldoc
 #+BEGIN_SRC emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-#+END_SRC
-
-**** company
-#+BEGIN_SRC emacs-lisp
-  (use-package slime
-    :ensure t
-    :defer t
-    :init
-    (setq inferior-lisp-program "sbcl")
-    (setq slime-contribs '(slime-fancy slime-company)))
-
-  (use-package slime-company
-    :ensure t
-    :config
-    (slime-setup))
 #+END_SRC
 
 *** Scheme
@@ -785,7 +708,6 @@ Use GNU Guile as the interpreter.
 **** haskell-mode
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
-    :ensure t
     :bind (:map haskell-mode-map
                 ("C-c C-c" . haskell-compile)
                 ("C-c C-l" . haskell-process-load-or-reload)
@@ -800,23 +722,20 @@ Use GNU Guile as the interpreter.
 **** hindent
 #+BEGIN_SRC emacs-lisp
   (use-package hindent
-    :ensure t
     :config
     (setq hindent-reformat-buffer-on-save t))
 #+END_SRC
 
-*** Bash
+*** Shell scripting
 **** company
 #+BEGIN_SRC emacs-lisp
-  (use-package company-shell
-    :ensure t)
+  (use-package company-shell)
 #+END_SRC
 
 *** Python
 **** company
 #+BEGIN_SRC emacs-lisp
   (use-package company-jedi
-    :ensure t
     :hook (python-mode . jedi:setup))
 #+END_SRC
 
@@ -824,7 +743,6 @@ Use GNU Guile as the interpreter.
 ** Auto tangling
 #+BEGIN_SRC emacs-lisp
   (use-package org-auto-tangle
-    :ensure t
     :hook (org-mode . org-auto-tangle-mode)
     :config
     (setq org-auto-tangle-default t))
@@ -878,14 +796,12 @@ Don't include a footer with my contact and publishing information.
 
 **** emacs-htmlize 
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize
-    :ensure t)
+  (use-package htmlize)
 #+END_SRC
 
 **** ox-twbs
 #+BEGIN_SRC emacs-lisp
-  (use-package ox-twbs
-    :ensure t)
+  (use-package ox-twbs)
 #+END_SRC
 
 *** Exporting to PDF
