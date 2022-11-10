@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# Source environment variables set by SystemD
+# https://github.com/systemd/systemd/issues/7641#issuecomment-693117066
+set -a
+. /dev/fd/0 <<EOF
+$(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
+EOF
+set +a
+
 # Add scripts to the PATH
 if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -q -v "$HOME/.local/bin"
 then
